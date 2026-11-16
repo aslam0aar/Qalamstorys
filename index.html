@@ -538,16 +538,17 @@ function WinEditor({ goals, choice, setChoice }) {
       <p class="small" style=${{ margin: "10px 0 0", fontWeight: 600 }}>${winFrom(g, { o: oi, u, n }).title}</p>
     </section>`; })}</div>`;
 }
-function EditWins({ profile, save, back }) {
+function EditWins({ profile, save, back, go }) {
   const [choice, setChoice] = useState((profile && profile.wins) || {});
   return html`<main class="screen">
+    <${Brand} />
     <div class="row-between"><button class="round iconbtn" onClick=${back} aria-label="Back">${I.back}</button><span></span></div>
     <p class="eyebrow" style=${{ marginTop: 20 }}>Your daily wins</p>
     <h1>Make them yours</h1>
     <p class="lede">Pick a win from each goal and set the amount. Only wins that match the goal are listed.</p>
     <${WinEditor} goals=${profile && profile.goals} choice=${choice} setChoice=${setChoice} />
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta" onClick=${() => save(choice)}>Save my wins</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta" onClick=${() => save(choice)}>Save my wins</button></div><${Tabs} tab="today" go=${go} /></div>
   </main>`;
 }
 
@@ -560,7 +561,7 @@ function Today({ profile, wins, done, toggle, go, startFocus, log, rest, comebac
   const off = 251.3 * (1 - n / wins.length);
   if (comeback) return html`<${Comeback} go=${go} startFocus=${startFocus} log=${log} rest=${rest} gap=${comeback} />`;
   return html`<main class="screen">
-    <div class="brandbar"><div class="logo" role="img" aria-label="QalamStorys"><span class="lq" aria-hidden="true">Qalam</span><span class="ls" aria-hidden="true">Storys</span></div></div>
+    <${Brand} />
     <div class="row-between">
       <div><p class="eyebrow">${now.toLocaleDateString(undefined, { weekday: "long" })} · ${now.toLocaleDateString(undefined, { day: "numeric", month: "short" })}</p><h1>${hello}</h1></div>
       <button class="round avatar" onClick=${() => go("progress")} aria-label="Your profile and progress">${(profile.name || "Me").slice(0, 1).toUpperCase()}</button>
@@ -625,6 +626,7 @@ function Focus({ win, idx, total, close, did }) {
 function Done({ idx, total, secs, go }) {
   const t = Math.floor(secs / 60) + " min" + (secs % 60 ? " " + (secs % 60) + " s" : "");
   return html`<main class="screen" style=${{ paddingTop: 72 }}>
+    <${Brand} />
     <div class="mark">${I.check(40, "#FFFFFF")}</div>
     <p class="eyebrow" style=${{ marginTop: 28 }}>Win ${idx + 1} of ${total}${secs ? " · " + t : ""}</p>
     <h1 class="xl" style=${{ marginTop: 8 }}>That counts.</h1>
@@ -634,7 +636,7 @@ function Done({ idx, total, secs, go }) {
       <button class="navrow" onClick=${() => go("community")}>${icoWrap(I.people)}<span class="t"><b>Check in with your circle</b><small>Circles open soon</small></span>${I.chev}</button>
     </div>
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta ink" onClick=${() => go("today")}>Back to today</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta ink" onClick=${() => go("today")}>Back to today</button></div><${Tabs} tab="today" go=${go} /></div>
   </main>`;
 }
 
@@ -651,6 +653,7 @@ function Comeback({ go, startFocus, log, rest, gap }) {
   const start = () => { setRest(r => [...new Set([...r, ...gapKeys])]); setSeen(dayKey()); setLight(dayKey()); setCb(c => c + 1); startFocus(0); };
   const restToo = () => { setRest(r => [...new Set([...r, ...gapKeys, dayKey()])]); setSeen(dayKey()); go("today"); };
   return html`<main class="screen" style=${{ paddingTop: 56 }}>
+    <${Brand} />
     <p class="eyebrow">${now.toLocaleDateString(undefined, { weekday: "long" })} · after ${gap > 29 ? "a few" : gap} quiet days</p>
     <h1 class="xl" style=${{ marginTop: 10 }}>Welcome back. Nothing's lost.</h1>
     <p class="lede" style=${{ fontSize: 17, marginTop: 14 }}>Coming back is the habit that matters most, and you just did it.</p>
@@ -660,10 +663,10 @@ function Comeback({ go, startFocus, log, rest, gap }) {
       <div class="dlabels">${week.map(x => html`<span key=${x.o} style=${x.o === 0 ? { color: "var(--ink)", fontWeight: 700 } : null}>${x.o === 0 ? "Today" : !x.on && x.o <= Math.min(gap, 2) ? "Rest" : x.d.toLocaleDateString(undefined, { weekday: "narrow" })}</span>`)}</div>
     </section>
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap">
+    <div class="foot"><div class="cta-wrap">
       <button class="cta" onClick=${start}>Start a 1-minute win</button>
       <button class="cta ghost" onClick=${restToo}>${restLeft > 0 ? "Use a rest day today" : "Rest today too"}</button>
-    </div></div>
+    </div><${Tabs} tab="today" go=${go} /></div>
   </main>`;
 }
 
@@ -680,6 +683,7 @@ function Progress({ go, log, journal, setTheme, dark }) {
   const top = MOODS.map(m => [m, moods.filter(x => x === m).length]).sort((a, b) => b[1] - a[1])[0];
   const comebacks = store.get(P + "comebacks", 0);
   return html`<main class="screen">
+    <${Brand} />
     <p class="eyebrow">${now.toLocaleDateString(undefined, { month: "long" })} so far</p>
     <h1>Small steps, adding up.</h1>
     <div class="grid2">
@@ -710,6 +714,7 @@ function Journal({ go, journal, log, open, seg, setSeg, pagesUI, newPageCta }) {
   const moods = journal.map(e => e.mood).filter(Boolean);
   const top = MOODS.map(m => [m, moods.filter(x => x === m).length]).sort((a, b) => b[1] - a[1])[0];
   return html`<main class="screen">
+    <${Brand} />
     <p class="eyebrow">Private · only you can see this</p>
     <h1>Journal</h1>
     <div class="seg" role="group" aria-label="Journal sections"><button aria-pressed=${seg !== "pages"} onClick=${() => setSeg("entries")}>Entries</button><button aria-pressed=${seg === "pages"} onClick=${() => setSeg("pages")}>Pages</button></div>
@@ -737,7 +742,7 @@ function Journal({ go, journal, log, open, seg, setSeg, pagesUI, newPageCta }) {
 }
 
 /* ---------- 08 Journal · write ---------- */
-function JournalWrite({ entry, draft, save, close }) {
+function JournalWrite({ entry, draft, save, close, go }) {
   const [mood, setMood] = useState(entry ? entry.mood : "");
   const [text, setText] = useState(entry ? entry.text : (draft && draft.text) || "");
   const blog = entry ? entry.blog : draft && draft.blog;
@@ -746,6 +751,7 @@ function JournalWrite({ entry, draft, save, close }) {
   const d = entry ? new Date(entry.at) : new Date();
   const flip = t => setTags(x => x.includes(t) ? x.filter(y => y !== t) : [...x, t]);
   return html`<main class="screen">
+    <${Brand} />
     <div class="row-between"><button class="round iconbtn" onClick=${close} aria-label="Close without saving">${I.close}</button>
       <p class="eyebrow">${d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })} · ${d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</p><span style=${{ width: 44 }}></span></div>
     ${blog && html`<span class="bloglink">${I.cards}Linked to blog: ${blog.title}</span>`}
@@ -759,13 +765,14 @@ function JournalWrite({ entry, draft, save, close }) {
       <div><p style=${{ margin: 0, fontSize: 15, fontWeight: 600 }}>Share as a win with my circle</p><p class="small muted" style=${{ margin: "2px 0 0" }}>${share ? "Shares when circles open. Your mood stays private." : "Off — this entry stays private."}</p></div>
       <button class="switch" role="switch" aria-checked=${share} aria-label="Share as a win with my circle" onClick=${() => setShare(!share)}><span></span></button></div>
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta" disabled=${!text.trim() && !mood} onClick=${() => save({ at: entry ? entry.at : Date.now(), day: entry ? entry.day : dayKey(), mood, text: text.trim(), tags, share, blog: blog || null })}>Save entry</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta" disabled=${!text.trim() && !mood} onClick=${() => save({ at: entry ? entry.at : Date.now(), day: entry ? entry.day : dayKey(), mood, text: text.trim(), tags, share, blog: blog || null })}>Save entry</button></div><${Tabs} tab="journal" go=${go} /></div>
   </main>`;
 }
 
 /* ---------- 09 Community + 10 Circle ---------- */
 function Community({ go, profile }) {
   return html`<main class="screen">
+    <${Brand} />
     <p class="eyebrow">Small circles · kind by default</p>
     <h1>Community</h1>
     <button class="circle-hero" onClick=${() => go("circle")}>
@@ -1077,6 +1084,7 @@ function Circle({ go, profile, log }) {
   const shown = cloud ? members : [];
   const open = Math.max(0, Math.min(2, MAX_MEMBERS - count - (cloud && !isMember ? 0 : 0)));
   return html`<main class="screen">
+    <${Brand} />
     <div class="row-between"><button class="round iconbtn" onClick=${() => go("community")} aria-label="Back to community">${I.back}</button><span></span></div>
     <p class="eyebrow" style=${{ marginTop: 20 }}>${len}-day challenge · day ${day} of ${len}</p>
     <h1>Your circle</h1>
@@ -1108,7 +1116,7 @@ function Circle({ go, profile, log }) {
     ${cloud && cloud.hosted && cloud.circle && html`<button class="link" style=${{ padding: "8px 0" }} onClick=${cloud.leaveCircle}>Switch circle</button>`}
     ${cloud && !noCircle && html`<${CircleChat} key=${cloud.circle || "c"} cloud=${cloud} isMember=${isMember} />`}
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta" disabled=${checked} onClick=${checkIn}>${checked ? "Checked in · nice work" : "Check in for today"}</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta" disabled=${checked} onClick=${checkIn}>${checked ? "Checked in · nice work" : "Check in for today"}</button></div><${Tabs} tab="community" go=${go} /></div>
   </main>`;
 }
 
@@ -1122,6 +1130,7 @@ function Blogs({ go, open }) {
   const [topic, setTopic] = useStored("blog-topic", "All");
   const list = BLOGS.filter(b => topic === "All" || b.topic === topic);
   return html`<main class="screen">
+    <${Brand} />
     <p class="eyebrow">Card decks · by @explainit.simply</p>
     <h1>Blogs</h1>
     <div class="row-between" style=${{ marginTop: 16 }}>
@@ -1137,13 +1146,14 @@ function Blogs({ go, open }) {
     <div class="foot"><${Tabs} tab="blogs" go=${go} /></div>
   </main>`;
 }
-function BlogPost({ id, back, toJournal, toPages, hasPage }) {
+function BlogPost({ id, back, toJournal, toPages, hasPage, go }) {
   const b = BLOGS.find(x => x.id === id) || BLOGS[0];
   const [i, setI] = useState(0);
   const track = useRef(null);
   const onScroll = e => { const el = e.currentTarget; setI(Math.round(el.scrollLeft / el.clientWidth)); };
   const goTo = k => { const el = track.current; if (!el) return; const n = Math.max(0, Math.min(b.cards.length - 1, k)); el.scrollTo({ left: n * el.clientWidth, behavior: "smooth" }); setI(n); };
   return html`<main class="screen">
+    <${Brand} />
     <div class="row-between"><button class="round iconbtn" onClick=${back} aria-label="Back to blogs">${I.back}</button><span></span></div>
     <p class="eyebrow" style=${{ marginTop: 20 }}>${b.topic}</p>
     <h1>${b.title}</h1>
@@ -1164,7 +1174,7 @@ function BlogPost({ id, back, toJournal, toPages, hasPage }) {
     ${b.close && html`<p class="lede" style=${{ marginTop: 18 }}>${b.close}</p>`}
     ${b.safety && html`<p class="small muted" style=${{ marginTop: 10 }}>${b.safety}</p>`}
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta ghost" onClick=${() => toPages(b)}>${hasPage(b.id) ? "Open my notes page" : "Save to Pages"}</button><button class="cta" onClick=${() => toJournal(b, "")}>${I.book}Write about this in my journal</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta ghost" onClick=${() => toPages(b)}>${hasPage(b.id) ? "Open my notes page" : "Save to Pages"}</button><button class="cta" onClick=${() => toJournal(b, "")}>${I.book}Write about this in my journal</button></div><${Tabs} tab="blogs" go=${go} /></div>
   </main>`;
 }
 
@@ -1406,7 +1416,7 @@ function HabitGrid({ b, set }) {
   </div>`;
 }
 
-function PageView({ id, pages, setPages, openPage, back, openBlog, trash }) {
+function PageView({ id, pages, setPages, openPage, back, openBlog, trash, go }) {
   const page = pages.find(p => p.id === id);
   const [focus, setFocus] = useState({ id: null, n: 0 });
   const [active, setActive] = useState(null);
@@ -1417,7 +1427,7 @@ function PageView({ id, pages, setPages, openPage, back, openBlog, trash }) {
   useEffect(() => { if (page && !page.title && titleRef.current) titleRef.current.focus(); }, [id]);
   React.useLayoutEffect(() => { const el = titleRef.current; if (el) { el.style.height = "auto"; el.style.height = el.scrollHeight + "px"; } });
   const ds = useDragSort((a, c) => upd(p => ({ blocks: move(p.blocks || [], a, c) })));
-  if (!page || page.deleted) return html`<main class="screen"><button class="round iconbtn" onClick=${back} aria-label="Back">${I.back}</button><div class="card empty" style=${{ marginTop: 20 }}><b>Page not found</b>It may have been deleted.</div></main>`;
+  if (!page || page.deleted) return html`<main class="screen"><${Brand} /><button class="round iconbtn" onClick=${back} aria-label="Back">${I.back}</button><div class="card empty" style=${{ marginTop: 20 }}><b>Page not found</b>It may have been deleted.</div></main>`;
   const upd = f => setPages(all => all.map(p => p.id === id ? { ...p, ...(typeof f === "function" ? f(p) : f), at: Date.now() } : p));
   const blocks = page.blocks || [];
   const setBlocks = f => upd(p => ({ blocks: f(p.blocks || []) }));
@@ -1471,6 +1481,7 @@ function PageView({ id, pages, setPages, openPage, back, openBlog, trash }) {
     return txt(b);
   };
   return html`<main class="screen" onClick=${() => { if (more) setMore(false); }}>
+    <${Brand} />
     <div class="row-between" style=${{ position: "relative" }}>
       <button class="round iconbtn" onClick=${back} aria-label="Back">${I.back}</button>
       <span class="pg-crumb">${["Pages", ...crumbs.map(x => x.title || "Untitled")].join(" › ")}</span>
@@ -1497,9 +1508,12 @@ function PageView({ id, pages, setPages, openPage, back, openBlog, trash }) {
     </div>`; })}</div>
     <button class="pg-add" onClick=${() => { const nb = B("p", "/"); setBlocks(bs => [...bs, nb]); setActive(nb.id); focusOn(nb.id); }}>＋ Add a block</button>
     <p class="small muted" style=${{ margin: "18px 0 28px" }}>Tip: type / in any line to change it into a heading, checklist, toggle and more.</p>
+    <div class="grow"></div>
+    <div class="foot"><${Tabs} tab="journal" go=${go} /></div>
   </main>`;
 }
 
+const Brand = () => html`<div class="brandbar"><div class="logo" role="img" aria-label="QalamStorys"><span class="lq" aria-hidden="true">Qalam</span><span class="ls" aria-hidden="true">Storys</span></div></div>`;
 function Tabs({ tab, go }) {
   const T = [["today", "Today", I.sun], ["journal", "Journal", I.book], ["blogs", "Blogs", I.cards], ["community", "Community", I.people], ["progress", "Progress", I.chart]];
   return html`<nav class="tabbar" aria-label="Tabs">${T.map(([id, label, icon]) => html`
@@ -1548,14 +1562,14 @@ function App() {
   useEffect(() => { document.body.style.background = focus !== null ? "#1E1B4B" : ""; }, [focus]);
 
   const toastEl = toastMsg && html`<div class="pg-toast" role="status">${toastMsg.text}${toastMsg.undo && html`<button onClick=${() => { toastMsg.undo(); setToastMsg(null); }}>Undo</button>`}</div>`;
-  if (view === "page" && pageId) return html`<${React.Fragment}><${PageView} key=${pageId} id=${pageId} pages=${pages} setPages=${setPages} openPage=${openPage} trash=${trashPage}
+  if (view === "page" && pageId) return html`<${React.Fragment}><${PageView} go=${go} key=${pageId} id=${pageId} pages=${pages} setPages=${setPages} openPage=${openPage} trash=${trashPage}
     back=${() => { const p = pages.find(x => x.id === pageId); const up = p && p.parent && pages.find(x => x.id === p.parent && !x.trashed && !x.deleted); if (up) openPage(up.id); else { setJseg("pages"); go("journal"); } }}
     openBlog=${bid => { if (BLOGS.some(b => b.id === bid)) { setBlogId(bid); setView("blog"); window.scrollTo(0, 0); } }} />${toastEl}</${React.Fragment}>`;
   if (view === "onboarding") return html`<${Onboarding} profile=${profile} done=${p => { setProfile(p); go("today"); }} />`;
   if (focus !== null) return html`<${Focus} win=${wins[focus] || wins[0]} idx=${focus} total=${wins.length} close=${() => setFocus(null)}
     did=${(mins, secs) => { const w = wins[focus] || wins[0]; if (!done.includes(w.id)) setDone([...done, w.id]); setLog(l => ({ ...l, [today]: { ...(l[today] || {}), w: Math.max(((l[today] || {}).w || 0), done.includes(w.id) ? done.length : done.length + 1), m: ((l[today] || {}).m || 0) + mins } })); setDoneInfo({ idx: focus, secs }); setFocus(null); setView("done"); }} />`;
   if (view === "done" && doneInfo) return html`<${Done} idx=${doneInfo.idx} total=${wins.length} secs=${doneInfo.secs} go=${go} />`;
-  if (view === "journalWrite") return html`<${JournalWrite} entry=${editing ? journal.find(e => e.at === editing) : null} draft=${editing ? null : draft}
+  if (view === "journalWrite") return html`<${JournalWrite} go=${go} entry=${editing ? journal.find(e => e.at === editing) : null} draft=${editing ? null : draft}
     close=${() => { if (!editing && draft && draft.blog) { setDraft(null); setView("blog"); window.scrollTo(0, 0); } else go(editing ? "journal" : store.get(P + "tab", "today")); }}
     save=${e => { setJournal(j => [e, ...j.filter(x => x.at !== e.at)].sort((a, b) => b.at - a.at)); setEditing(null); setDraft(null); go("journal"); }} />`;
   if (view === "journal") return html`<${React.Fragment}><${Journal} go=${go} journal=${journal} log=${log} open=${at => { setEditing(at); setView("journalWrite"); window.scrollTo(0, 0); }}
@@ -1563,11 +1577,11 @@ function App() {
     pagesUI=${html`<${PagesHome} pages=${pages} setPages=${setPages} openPage=${openPage} sync=${pageSync} trashView=${trashView} setTrashView=${setTrashView} toast=${toast} />`}
     newPageCta=${html`<button class="cta" onClick=${() => setTplOpen(true)}>＋ New page</button>`} />
     ${tplOpen && html`<${TemplateSheet} close=${() => setTplOpen(false)} pick=${t => { const np = newPage(null, t); setPages(all => [...all, np]); setTplOpen(false); openPage(np.id); }} />`}${toastEl}</${React.Fragment}>`;
-  if (view === "blog" && blogId) return html`<${BlogPost} id=${blogId} back=${() => go("blogs")} hasPage=${id => !!blogPage(id)}
+  if (view === "blog" && blogId) return html`<${BlogPost} go=${go} id=${blogId} back=${() => go("blogs")} hasPage=${id => !!blogPage(id)}
     toPages=${b => { const ex = blogPage(b.id); if (ex) return openPage(ex.id); const np = newPage(null, { make: () => pageFromBlog(b) }); setPages(all => [...all, np]); openPage(np.id); }}
     toJournal=${(b, step) => { setEditing(null); setDraft({ text: step, tags: step ? ["Idea"] : [], blog: { id: b.id, title: b.title } }); setView("journalWrite"); window.scrollTo(0, 0); }} />`;
   if (view === "blogs") return html`<${Blogs} go=${go} open=${id => { setBlogId(id); setView("blog"); window.scrollTo(0, 0); }} />`;
-  if (view === "editWins") return html`<${EditWins} profile=${profile} back=${() => go("today")} save=${w => { setProfile({ ...profile, wins: w }); go("today"); }} />`;
+  if (view === "editWins") return html`<${EditWins} go=${go} profile=${profile} back=${() => go("today")} save=${w => { setProfile({ ...profile, wins: w }); go("today"); }} />`;
   if (view === "community") return html`<${Community} go=${go} profile=${profile} />`;
   if (view === "circle") return html`<${Circle} go=${go} profile=${profile} log=${log} />`;
   if (view === "progress") return html`<${Progress} go=${go} log=${log} journal=${journal} dark=${dark} setTheme=${toggleTheme} />`;
