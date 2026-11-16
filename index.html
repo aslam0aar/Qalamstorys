@@ -248,6 +248,107 @@ textarea.area { width: 100%; margin-top: 10px; min-height: 150px; padding: 16px;
 @keyframes pop { from { transform: scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 @media (max-width: 350px) { .moods { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* pages (notes workspace) */
+.seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--chip); border-radius: 14px; padding: 4px; margin-top: 16px; }
+.seg button { border: 0; background: none; font: inherit; font-size: 15px; font-weight: 600; padding: 9px 0; border-radius: 10px; color: var(--ink-2); }
+.seg button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.pg-search { display: flex; align-items: center; gap: 8px; height: 44px; margin-top: 14px; padding: 0 16px; border: 1px solid var(--border); background: var(--surface); border-radius: 22px; color: var(--ink-3); }
+.pg-search input { flex: 1; min-width: 0; border: 0; background: none; font: inherit; font-size: 16px; color: var(--ink); outline: none; }
+.pg-lbl { margin: 18px 0 8px; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3); }
+.pg-list { padding: 4px 0; }
+.pg-row { display: flex; align-items: center; gap: 6px; padding: 0 10px 0 6px; position: relative; }
+.pg-row + .pg-row, .pg-sub > .pg-row:first-child { border-top: 1px solid var(--hair); }
+.pg-row.dragging { opacity: .4; }
+.pg-row.drop::before, .pg-blk.drop::before { content: ""; position: absolute; left: 8px; right: 8px; top: -1px; height: 3px; border-radius: 2px; background: var(--ink); }
+.pg-row.dropend::after, .pg-blk.dropend::after { content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px; height: 3px; border-radius: 2px; background: var(--ink); }
+.pg-car { width: 28px; height: 40px; border: 0; background: none; color: var(--ink-3); display: grid; place-items: center; flex: none; padding: 0; }
+.pg-car svg { transition: transform .15s; }
+.pg-car[aria-expanded="true"] svg { transform: rotate(90deg); }
+.pg-open { flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; border: 0; background: none; font: inherit; color: var(--ink); text-align: left; padding: 11px 0; }
+.pg-open .e { font-size: 19px; width: 24px; text-align: center; flex: none; }
+.pg-open b { font-size: 16px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-open small { margin-left: auto; padding-left: 8px; font-size: 12px; color: var(--ink-3); white-space: nowrap; }
+.pg-grip { width: 28px; height: 36px; flex: none; border: 0; background: none; color: var(--ink-3); display: grid; place-items: center; touch-action: none; cursor: grab; padding: 0; border-radius: 8px; }
+.pg-grip:focus-visible { outline: 2px solid var(--ink); }
+.pg-sync { display: flex; align-items: center; gap: 8px; margin-top: 18px; font-size: 13px; color: var(--ink-2); }
+.pg-sync button { border: 0; background: none; padding: 0; font: inherit; font-size: 13px; font-weight: 700; color: var(--ink); text-decoration: underline; }
+.pg-signin { margin-top: 10px; padding: 14px 16px; border-radius: 20px; display: flex; flex-direction: column; gap: 4px; }
+.pg-trashlink { margin-top: 10px; border: 0; background: none; padding: 8px 0; font: inherit; font-size: 14px; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
+/* page editor */
+.pg-crumb { flex: 1; min-width: 0; text-align: center; font-size: 13px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 0 8px; }
+.pg-icon { margin-top: 18px; border: 0; background: none; font-size: 44px; line-height: 1; padding: 4px; border-radius: 12px; }
+.pg-title { display: block; width: 100%; border: 0; background: none; font: inherit; font-size: 30px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--ink); outline: none; padding: 4px 0 10px; resize: none; overflow: hidden; }
+.pg-emojis { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; padding: 10px; margin-top: 6px; border-radius: 20px; }
+.pg-emojis button { border: 0; background: none; font-size: 22px; height: 40px; border-radius: 10px; }
+.pg-emojis button:hover { background: var(--chip); }
+.pg-bloglink { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; margin-bottom: 8px; padding: 8px 12px; border: 1px solid var(--border); background: var(--surface); border-radius: 14px; font: inherit; font-size: 13px; color: var(--ink-2); text-align: left; }
+.pg-bloglink svg { width: 16px; height: 16px; flex: none; }
+.pg-bloglink b { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pg-blocks { margin: 0 -8px; }
+.pg-blk { display: flex; align-items: flex-start; gap: 2px; position: relative; padding: 2px 0; }
+.pg-blk.dragging { opacity: .4; }
+.pg-blk > .pg-grip { height: 30px; color: var(--off); }
+.pg-body { flex: 1; min-width: 0; display: flex; align-items: flex-start; gap: 8px; }
+.btext { flex: 1; min-width: 0; display: block; border: 0; background: none; font: inherit; font-size: 16px; line-height: 1.5; color: var(--ink); resize: none; overflow: hidden; outline: none; padding: 3px 0; }
+.btext::placeholder { color: var(--off); }
+.btext.h { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.3; padding-top: 8px; }
+.btext.done { color: var(--ink-3); text-decoration: line-through; }
+.btext.quote { font-style: italic; color: var(--ink-2); }
+.pg-quote { border-left: 3px solid var(--ink); padding-left: 12px; }
+.pg-check { width: 20px; height: 20px; margin-top: 5px; flex: none; border: 1.5px solid var(--ink-3); border-radius: 6px; background: var(--surface); display: grid; place-items: center; padding: 0; color: var(--bg); }
+.pg-check[aria-checked="true"] { background: var(--ink); border-color: var(--ink); }
+.pg-dot { width: 20px; flex: none; text-align: center; font-size: 20px; line-height: 30px; color: var(--ink); }
+.pg-tog { width: 24px; height: 30px; flex: none; border: 0; background: none; color: var(--ink-2); display: grid; place-items: center; padding: 0; }
+.pg-tog svg { transition: transform .15s; }
+.pg-tog[aria-expanded="true"] svg { transform: rotate(90deg); }
+.pg-togbody { margin: 0 0 4px 32px; padding-left: 10px; border-left: 1px solid var(--border); }
+.pg-callout { flex: 1; display: flex; gap: 10px; background: var(--chip); border-radius: 16px; padding: 8px 14px; }
+.pg-callout > span { font-size: 18px; line-height: 30px; }
+.pg-hr { flex: 1; height: 1px; background: var(--border); margin: 14px 0; }
+.pg-x { width: 30px; height: 30px; flex: none; border: 0; background: none; color: var(--ink-3); display: grid; place-items: center; border-radius: 8px; padding: 0; }
+.pg-x svg { width: 16px; height: 16px; }
+.pg-link { flex: 1; display: flex; align-items: center; gap: 10px; border: 0; background: none; font: inherit; font-size: 16px; font-weight: 600; color: var(--ink); text-align: left; padding: 5px 0; text-decoration: underline; text-decoration-color: var(--border); text-underline-offset: 4px; }
+.pg-menu { position: relative; z-index: 6; margin: 2px 0 8px 30px; padding: 6px; box-shadow: 0 18px 40px rgba(20,20,30,.16); border-radius: 20px; }
+.pg-menu .k { padding: 6px 10px; font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--ink-3); }
+.pg-mi { width: 100%; display: flex; align-items: center; gap: 12px; padding: 7px 10px; border: 0; background: none; border-radius: 12px; font: inherit; font-size: 15px; font-weight: 500; color: var(--ink); text-align: left; }
+.pg-mi:hover, .pg-mi.hi { background: var(--chip); }
+.pg-mi i { font-style: normal; width: 32px; height: 32px; flex: none; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); display: grid; place-items: center; font-size: 14px; font-weight: 700; color: var(--ink-2); }
+.pg-mi small { display: block; font-size: 12px; color: var(--ink-3); font-weight: 400; }
+.pg-add { margin-top: 6px; border: 0; background: none; font: inherit; font-size: 15px; color: var(--ink-2); padding: 10px 0; display: flex; align-items: center; gap: 8px; }
+.pg-more { position: absolute; right: 0; top: 52px; z-index: 8; min-width: 220px; padding: 6px; border-radius: 18px; box-shadow: 0 18px 40px rgba(20,20,30,.16); }
+/* habit grid */
+.pg-hab { flex: 1; min-width: 0; padding: 12px 12px 8px; border-radius: 18px; }
+.pg-hab table { width: 100%; border-collapse: collapse; }
+.pg-hab th { font-family: var(--mono); font-size: 10px; font-weight: 500; letter-spacing: .08em; color: var(--ink-3); padding: 0 0 6px; text-align: center; }
+.pg-hab th:first-child { text-align: left; }
+.pg-hab td { padding: 3px 0; text-align: center; }
+.pg-hab td:first-child { text-align: left; width: 40%; }
+.pg-hab input { width: 100%; border: 0; background: none; font: inherit; font-size: 14px; font-weight: 600; color: var(--ink); outline: none; padding: 4px 0; }
+.pg-day { width: 26px; height: 26px; border-radius: 13px; border: 1.5px solid var(--border); background: var(--surface); display: inline-grid; place-items: center; padding: 0; color: var(--bg); }
+.pg-day[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); }
+.pg-hab .row-between { margin-top: 8px; font-size: 13px; }
+.pg-hab .row-between button { border: 0; background: none; font: inherit; font-size: 13px; font-weight: 600; color: var(--ink-2); padding: 6px 0; }
+/* template sheet + toast */
+.pg-dim { position: fixed; inset: 0; z-index: 20; background: rgba(20,20,30,.35); display: flex; align-items: flex-end; justify-content: center; }
+.pg-sheet { width: 100%; max-width: 480px; max-height: 92dvh; overflow: auto; background: var(--bg); border-radius: 28px 28px 0 0; padding: 10px 20px max(20px, env(safe-area-inset-bottom, 0px)); }
+.pg-grab { width: 40px; height: 5px; border-radius: 3px; background: var(--border); margin: 0 auto 14px; }
+.pg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.pg-tp { padding: 14px; border-radius: 20px; text-align: left; font: inherit; color: var(--ink); display: flex; flex-direction: column; gap: 3px; }
+.pg-tp .e { font-size: 24px; }
+.pg-tp b { font-size: 15px; margin-top: 6px; }
+.pg-tp span:last-child { font-size: 12.5px; color: var(--ink-2); line-height: 1.35; }
+.pg-tp[aria-pressed="true"] { border: 2px solid var(--ink); padding: 13px; }
+.pg-toast { position: fixed; left: 50%; bottom: 160px; transform: translateX(-50%); z-index: 30; display: flex; align-items: center; gap: 14px; padding: 12px 18px; border-radius: 16px; background: var(--ink); color: var(--bg); font-size: 14px; box-shadow: var(--shadow); white-space: nowrap; }
+.pg-toast button { border: 0; background: none; padding: 0; font: inherit; font-weight: 700; color: var(--bg); text-decoration: underline; }
+.btext.tog { font-weight: 600; }
+.pg-hrow { padding: 6px 0; }
+.pg-hrow + .pg-hrow { border-top: 1px solid var(--hair); }
+.pg-hhead { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: .08em; color: var(--ink-3); text-transform: uppercase; }
+.pg-hhead .pg-hdays { margin-top: 4px; }
+.pg-hname { display: flex; align-items: center; gap: 4px; }
+.pg-hdays { display: grid; grid-template-columns: repeat(7, 1fr); justify-items: center; gap: 4px; }
+.pg-hrow:not(.pg-hhead) .pg-hdays { margin-top: 2px; }
+.pg-day { width: 32px; height: 32px; border-radius: 16px; }
 </style>
 </head>
 <body>
@@ -437,16 +538,17 @@ function WinEditor({ goals, choice, setChoice }) {
       <p class="small" style=${{ margin: "10px 0 0", fontWeight: 600 }}>${winFrom(g, { o: oi, u, n }).title}</p>
     </section>`; })}</div>`;
 }
-function EditWins({ profile, save, back }) {
+function EditWins({ profile, save, back, go }) {
   const [choice, setChoice] = useState((profile && profile.wins) || {});
   return html`<main class="screen">
+    <${Brand} />
     <div class="row-between"><button class="round iconbtn" onClick=${back} aria-label="Back">${I.back}</button><span></span></div>
     <p class="eyebrow" style=${{ marginTop: 20 }}>Your daily wins</p>
     <h1>Make them yours</h1>
     <p class="lede">Pick a win from each goal and set the amount. Only wins that match the goal are listed.</p>
     <${WinEditor} goals=${profile && profile.goals} choice=${choice} setChoice=${setChoice} />
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta" onClick=${() => save(choice)}>Save my wins</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta" onClick=${() => save(choice)}>Save my wins</button></div><${Tabs} tab="today" go=${go} /></div>
   </main>`;
 }
 
@@ -459,7 +561,7 @@ function Today({ profile, wins, done, toggle, go, startFocus, log, rest, comebac
   const off = 251.3 * (1 - n / wins.length);
   if (comeback) return html`<${Comeback} go=${go} startFocus=${startFocus} log=${log} rest=${rest} gap=${comeback} />`;
   return html`<main class="screen">
-    <div class="brandbar"><div class="logo" role="img" aria-label="QalamStorys"><span class="lq" aria-hidden="true">Qalam</span><span class="ls" aria-hidden="true">Storys</span></div></div>
+    <${Brand} />
     <div class="row-between">
       <div><p class="eyebrow">${now.toLocaleDateString(undefined, { weekday: "long" })} · ${now.toLocaleDateString(undefined, { day: "numeric", month: "short" })}</p><h1>${hello}</h1></div>
       <button class="round avatar" onClick=${() => go("progress")} aria-label="Your profile and progress">${(profile.name || "Me").slice(0, 1).toUpperCase()}</button>
@@ -524,6 +626,7 @@ function Focus({ win, idx, total, close, did }) {
 function Done({ idx, total, secs, go }) {
   const t = Math.floor(secs / 60) + " min" + (secs % 60 ? " " + (secs % 60) + " s" : "");
   return html`<main class="screen" style=${{ paddingTop: 72 }}>
+    <${Brand} />
     <div class="mark">${I.check(40, "#FFFFFF")}</div>
     <p class="eyebrow" style=${{ marginTop: 28 }}>Win ${idx + 1} of ${total}${secs ? " · " + t : ""}</p>
     <h1 class="xl" style=${{ marginTop: 8 }}>That counts.</h1>
@@ -533,7 +636,7 @@ function Done({ idx, total, secs, go }) {
       <button class="navrow" onClick=${() => go("community")}>${icoWrap(I.people)}<span class="t"><b>Check in with your circle</b><small>Circles open soon</small></span>${I.chev}</button>
     </div>
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta ink" onClick=${() => go("today")}>Back to today</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta ink" onClick=${() => go("today")}>Back to today</button></div><${Tabs} tab="today" go=${go} /></div>
   </main>`;
 }
 
@@ -550,6 +653,7 @@ function Comeback({ go, startFocus, log, rest, gap }) {
   const start = () => { setRest(r => [...new Set([...r, ...gapKeys])]); setSeen(dayKey()); setLight(dayKey()); setCb(c => c + 1); startFocus(0); };
   const restToo = () => { setRest(r => [...new Set([...r, ...gapKeys, dayKey()])]); setSeen(dayKey()); go("today"); };
   return html`<main class="screen" style=${{ paddingTop: 56 }}>
+    <${Brand} />
     <p class="eyebrow">${now.toLocaleDateString(undefined, { weekday: "long" })} · after ${gap > 29 ? "a few" : gap} quiet days</p>
     <h1 class="xl" style=${{ marginTop: 10 }}>Welcome back. Nothing's lost.</h1>
     <p class="lede" style=${{ fontSize: 17, marginTop: 14 }}>Coming back is the habit that matters most, and you just did it.</p>
@@ -559,10 +663,10 @@ function Comeback({ go, startFocus, log, rest, gap }) {
       <div class="dlabels">${week.map(x => html`<span key=${x.o} style=${x.o === 0 ? { color: "var(--ink)", fontWeight: 700 } : null}>${x.o === 0 ? "Today" : !x.on && x.o <= Math.min(gap, 2) ? "Rest" : x.d.toLocaleDateString(undefined, { weekday: "narrow" })}</span>`)}</div>
     </section>
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap">
+    <div class="foot"><div class="cta-wrap">
       <button class="cta" onClick=${start}>Start a 1-minute win</button>
       <button class="cta ghost" onClick=${restToo}>${restLeft > 0 ? "Use a rest day today" : "Rest today too"}</button>
-    </div></div>
+    </div><${Tabs} tab="today" go=${go} /></div>
   </main>`;
 }
 
@@ -579,6 +683,7 @@ function Progress({ go, log, journal, setTheme, dark }) {
   const top = MOODS.map(m => [m, moods.filter(x => x === m).length]).sort((a, b) => b[1] - a[1])[0];
   const comebacks = store.get(P + "comebacks", 0);
   return html`<main class="screen">
+    <${Brand} />
     <p class="eyebrow">${now.toLocaleDateString(undefined, { month: "long" })} so far</p>
     <h1>Small steps, adding up.</h1>
     <div class="grid2">
@@ -602,15 +707,18 @@ function Progress({ go, log, journal, setTheme, dark }) {
 }
 
 /* ---------- 07 Journal ---------- */
-function Journal({ go, journal, log, open }) {
+function Journal({ go, journal, log, open, seg, setSeg, pagesUI, newPageCta }) {
   const now = new Date(), pre = now.getFullYear() + "-" + (now.getMonth() + 1) + "-";
   const jMonth = journal.filter(e => e.day.startsWith(pre));
   const winsNoted = journal.filter(e => e.tags.includes("Win")).length;
   const moods = journal.map(e => e.mood).filter(Boolean);
   const top = MOODS.map(m => [m, moods.filter(x => x === m).length]).sort((a, b) => b[1] - a[1])[0];
   return html`<main class="screen">
+    <${Brand} />
     <p class="eyebrow">Private · only you can see this</p>
     <h1>Journal</h1>
+    <div class="seg" role="group" aria-label="Journal sections"><button aria-pressed=${seg !== "pages"} onClick=${() => setSeg("entries")}>Entries</button><button aria-pressed=${seg === "pages"} onClick=${() => setSeg("pages")}>Pages</button></div>
+    ${seg === "pages" ? pagesUI : html`<${React.Fragment}>
     <section class="card" style=${{ marginTop: 16, padding: 18, borderRadius: 28, boxShadow: "var(--shadow)" }}>
       <p class="eyebrow" style=${{ fontSize: 11 }}>Today's prompt</p>
       <p style=${{ margin: "8px 0 0", fontSize: 20, lineHeight: 1.25, fontWeight: 800, letterSpacing: "-0.02em" }}>${PROMPT}</p>
@@ -627,13 +735,14 @@ function Journal({ go, journal, log, open }) {
         <span class="d"><small>${d.toLocaleDateString(undefined, { weekday: "short" }).toUpperCase()}</small><b>${d.getDate()}</b></span>
         <span class="t"><span>${e.text || "(no text)"}</span><span class="small muted">${[e.mood, ...e.tags, e.blog ? "Blog: " + e.blog.title : ""].filter(Boolean).join(" · ")}</span></span></button>`; })
       : html`<div class="card empty"><b>No entries yet</b>Your first line will show up here.</div>`}</div>
+    </${React.Fragment}>`}
     <div class="grow"></div>
-    <div class="foot"><div class="cta-wrap"><button class="cta" onClick=${() => open(null)}>Write today's entry</button></div><${Tabs} tab="journal" go=${go} /></div>
+    <div class="foot"><div class="cta-wrap">${seg === "pages" ? newPageCta : html`<button class="cta" onClick=${() => open(null)}>Write today's entry</button>`}</div><${Tabs} tab="journal" go=${go} /></div>
   </main>`;
 }
 
 /* ---------- 08 Journal · write ---------- */
-function JournalWrite({ entry, draft, save, close }) {
+function JournalWrite({ entry, draft, save, close, go }) {
   const [mood, setMood] = useState(entry ? entry.mood : "");
   const [text, setText] = useState(entry ? entry.text : (draft && draft.text) || "");
   const blog = entry ? entry.blog : draft && draft.blog;
@@ -642,6 +751,7 @@ function JournalWrite({ entry, draft, save, close }) {
   const d = entry ? new Date(entry.at) : new Date();
   const flip = t => setTags(x => x.includes(t) ? x.filter(y => y !== t) : [...x, t]);
   return html`<main class="screen">
+    <${Brand} />
     <div class="row-between"><button class="round iconbtn" onClick=${close} aria-label="Close without saving">${I.close}</button>
       <p class="eyebrow">${d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" })} · ${d.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" })}</p><span style=${{ width: 44 }}></span></div>
     ${blog && html`<span class="bloglink">${I.cards}Linked to blog: ${blog.title}</span>`}
@@ -655,13 +765,14 @@ function JournalWrite({ entry, draft, save, close }) {
       <div><p style=${{ margin: 0, fontSize: 15, fontWeight: 600 }}>Share as a win with my circle</p><p class="small muted" style=${{ margin: "2px 0 0" }}>${share ? "Shares when circles open. Your mood stays private." : "Off — this entry stays private."}</p></div>
       <button class="switch" role="switch" aria-checked=${share} aria-label="Share as a win with my circle" onClick=${() => setShare(!share)}><span></span></button></div>
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta" disabled=${!text.trim() && !mood} onClick=${() => save({ at: entry ? entry.at : Date.now(), day: entry ? entry.day : dayKey(), mood, text: text.trim(), tags, share, blog: blog || null })}>Save entry</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta" disabled=${!text.trim() && !mood} onClick=${() => save({ at: entry ? entry.at : Date.now(), day: entry ? entry.day : dayKey(), mood, text: text.trim(), tags, share, blog: blog || null })}>Save entry</button></div><${Tabs} tab="journal" go=${go} /></div>
   </main>`;
 }
 
 /* ---------- 09 Community + 10 Circle ---------- */
 function Community({ go, profile }) {
   return html`<main class="screen">
+    <${Brand} />
     <p class="eyebrow">Small circles · kind by default</p>
     <h1>Community</h1>
     <button class="circle-hero" onClick=${() => go("circle")}>
@@ -841,7 +952,7 @@ function VoiceAudio({ cloud, asset }) {
   useEffect(() => { if (cloud.blobUrl) cloud.blobUrl(asset).then(u => setSrc(u || null)).catch(() => {}); }, [asset]);
   return src ? html`<audio controls preload="none" src=${src}></audio>` : html`<span class="small muted">Loading…</span>`;
 }
-function SignIn() {
+function SignIn({ title = "Sign in to join a circle", note = "Open it on this device to join your circle." }) {
   const [email, setEmail] = useState("");
   const [st, setSt] = useState("idle"); // idle | busy | sent
   const [err, setErr] = useState("");
@@ -850,8 +961,8 @@ function SignIn() {
     setSt("busy"); setErr("");
     try { await sbSendLink(e); setSt("sent"); } catch (x) { setSt("idle"); setErr(/rate/i.test((x && x.message) || "") ? "Too many sign-in emails right now. Try again in a few minutes." : "Couldn't send the email. Check the address and try again."); }
   };
-  if (st === "sent") return html`<div><b>Check your inbox</b><span class="small muted">We sent a sign-in link to ${email.trim()}. Open it on this device to join your circle.</span></div>`;
-  return html`<div style=${{ width: "100%" }}><b>Sign in to join a circle</b><span class="small muted">We'll email you a link. No password needed.</span>
+  if (st === "sent") return html`<div><b>Check your inbox</b><span class="small muted">We sent a sign-in link to ${email.trim()}. ${note}</span></div>`;
+  return html`<div style=${{ width: "100%" }}><b>${title}</b><span class="small muted">We'll email you a link. No password needed.</span>
     <div class="composer"><input class="chatin" type="email" inputmode="email" autocomplete="email" placeholder="you@email.com" aria-label="Your email" value=${email} onInput=${e => setEmail(e.target.value)} onKeyDown=${e => { if (e.key === "Enter") send(); }} />
       <button class="pillbtn ink" disabled=${st === "busy"} onClick=${send}>${st === "busy" ? "Sending…" : "Email me a link"}</button></div>
     ${err && html`<p class="small" role="alert" style=${{ margin: "8px 0 0", color: "var(--ink-2)" }}>${err}</p>`}</div>`;
@@ -973,6 +1084,7 @@ function Circle({ go, profile, log }) {
   const shown = cloud ? members : [];
   const open = Math.max(0, Math.min(2, MAX_MEMBERS - count - (cloud && !isMember ? 0 : 0)));
   return html`<main class="screen">
+    <${Brand} />
     <div class="row-between"><button class="round iconbtn" onClick=${() => go("community")} aria-label="Back to community">${I.back}</button><span></span></div>
     <p class="eyebrow" style=${{ marginTop: 20 }}>${len}-day challenge · day ${day} of ${len}</p>
     <h1>Your circle</h1>
@@ -1004,7 +1116,7 @@ function Circle({ go, profile, log }) {
     ${cloud && cloud.hosted && cloud.circle && html`<button class="link" style=${{ padding: "8px 0" }} onClick=${cloud.leaveCircle}>Switch circle</button>`}
     ${cloud && !noCircle && html`<${CircleChat} key=${cloud.circle || "c"} cloud=${cloud} isMember=${isMember} />`}
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta" disabled=${checked} onClick=${checkIn}>${checked ? "Checked in · nice work" : "Check in for today"}</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta" disabled=${checked} onClick=${checkIn}>${checked ? "Checked in · nice work" : "Check in for today"}</button></div><${Tabs} tab="community" go=${go} /></div>
   </main>`;
 }
 
@@ -1024,6 +1136,7 @@ function Blogs({ go, open }) {
   const [topic, setTopic] = useStored("blog-topic", "All");
   const list = BLOGS.filter(b => topic === "All" || b.topic === topic);
   return html`<main class="screen">
+    <${Brand} />
     <p class="eyebrow">Card decks · by @explainit.simply</p>
     <h1>Blogs</h1>
     <div class="row-between" style=${{ marginTop: 16 }}>
@@ -1039,13 +1152,14 @@ function Blogs({ go, open }) {
     <div class="foot"><${Tabs} tab="blogs" go=${go} /></div>
   </main>`;
 }
-function BlogPost({ id, back, toJournal }) {
+function BlogPost({ id, back, toJournal, toPages, hasPage, go }) {
   const b = BLOGS.find(x => x.id === id) || BLOGS[0];
   const [i, setI] = useState(0);
   const track = useRef(null);
   const onScroll = e => { const el = e.currentTarget; setI(Math.round(el.scrollLeft / el.clientWidth)); };
   const goTo = k => { const el = track.current; if (!el) return; const n = Math.max(0, Math.min(b.cards.length - 1, k)); el.scrollTo({ left: n * el.clientWidth, behavior: "smooth" }); setI(n); };
   return html`<main class="screen">
+    <${Brand} />
     <div class="row-between"><button class="round iconbtn" onClick=${back} aria-label="Back to blogs">${I.back}</button><span></span></div>
     <p class="eyebrow" style=${{ marginTop: 20 }}>${b.topic}</p>
     <h1>${b.title}</h1>
@@ -1066,10 +1180,346 @@ function BlogPost({ id, back, toJournal }) {
     ${b.close && html`<p class="lede" style=${{ marginTop: 18 }}>${b.close}</p>`}
     ${b.safety && html`<p class="small muted" style=${{ marginTop: 10 }}>${b.safety}</p>`}
     <div class="grow"></div>
-    <div class="foot plain"><div class="cta-wrap"><button class="cta" onClick=${() => toJournal(b, "")}>${I.book}Write about this in my journal</button></div></div>
+    <div class="foot"><div class="cta-wrap"><button class="cta ghost" onClick=${() => toPages(b)}>${hasPage(b.id) ? "Open my notes page" : "Save to Pages"}</button><button class="cta" onClick=${() => toJournal(b, "")}>${I.book}Write about this in my journal</button></div><${Tabs} tab="blogs" go=${go} /></div>
   </main>`;
 }
 
+/* ---------- 13 Pages: personal notes workspace (blocks, sub-pages, templates, sync) ---------- */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const B = (type, text = "", extra = {}) => ({ id: uid(), type, text, ...extra });
+const stripTags = s => String(s || "").replace(/<[^>]+>/g, "").replace(/\s+/g, " ").trim();
+const PAGE_ICONS = ["📝", "🎯", "✅", "📖", "🙏", "🌅", "🌙", "💡", "📈", "💼", "❤️", "🧠", "🌱", "🔥", "⭐", "🧘", "🏃", "📚", "✍️", "🎨", "🗓️", "☕", "🕊️", "🌊"];
+const DAYS = ["M", "T", "W", "T", "F", "S", "S"];
+const weekStart = () => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return dayKey(d); };
+const todayIdx = () => (new Date().getDay() + 6) % 7;
+const habitRow = (name = "") => ({ id: uid(), name, days: [0, 0, 0, 0, 0, 0, 0] });
+const BLOCK_TYPES = [
+  ["p", "Text", "Plain writing", "T"], ["h", "Heading", "Big section title", "H"], ["todo", "Checklist", "Tick things off", "☐"],
+  ["bullet", "Bullet list", "Simple list", "•"], ["toggle", "Toggle", "Hide details inside", "▸"], ["quote", "Quote", "Words worth keeping", "❝"],
+  ["callout", "Callout", "A tip that stands out", "💡"], ["divider", "Divider", "A thin line", "—"], ["habits", "Habit tracker", "7-day grid", "✓"],
+  ["page", "Sub-page", "A page inside this page", "📄"]
+];
+const PLACE = { p: "Type '/' for blocks", h: "Heading", todo: "To-do", bullet: "List item", toggle: "Toggle title", quote: "Quote", callout: "Write a tip" };
+const TEXTY = ["p", "h", "todo", "bullet", "toggle", "quote", "callout"];
+const TEMPLATES = [
+  { id: "blank", e: "📝", t: "Blank page", d: "Just a title and text", make: () => ({ title: "", icon: "📝", blocks: [B("p")] }) },
+  { id: "habits", e: "✅", t: "Habit tracker", d: "7-day grid for up to 5 habits", make: () => ({ title: "Habit tracker", icon: "✅", blocks: [
+    B("callout", "Tick a day each time you keep the habit. Small wins add up."),
+    B("habits", "", { week: weekStart(), rows: [habitRow("Drink water first thing"), habitRow("10 minutes of reading"), habitRow("Walk after lunch")] }),
+    B("h", "Notes"), B("p")] }) },
+  { id: "goals", e: "🎯", t: "Goals plan", d: "Goal, why, steps, check-ins", make: () => ({ title: "My goal", icon: "🎯", blocks: [
+    B("h", "The goal"), B("p", "", { ph: "What do you want, in one sentence?" }), B("h", "Why it matters to me"), B("toggle", "My reasons", { body: "", open: true }),
+    B("h", "First steps"), B("todo"), B("todo"), B("todo"), B("h", "Weekly check-in"), B("callout", "Every Sunday: what worked, what didn't, and one change for next week.")] }) },
+  { id: "daily", e: "🌅", t: "Daily journal", d: "Mood, 3 wins, one lesson", make: () => ({ title: "Journal · " + new Date().toLocaleDateString(undefined, { day: "numeric", month: "short" }), icon: "🌅", blocks: [
+    B("h", "How I feel"), B("p"), B("h", "3 small wins"), B("todo"), B("todo"), B("todo"), B("h", "One lesson"), B("quote")] }) },
+  { id: "reading", e: "📖", t: "Reading notes", d: "Key ideas from a blog", make: () => ({ title: "Reading notes", icon: "📖", blocks: [
+    B("h", "Key ideas"), B("bullet"), B("bullet"), B("h", "What I'll try"), B("todo"), B("h", "My thoughts"), B("p")] }) },
+  { id: "gratitude", e: "🙏", t: "Gratitude list", d: "Three good things", make: () => ({ title: "Gratitude list", icon: "🙏", blocks: [
+    B("callout", "Three good things, big or small."), B("bullet"), B("bullet"), B("bullet")] }) }
+];
+const newPage = (parent, tpl = TEMPLATES[0], extra = {}) => {
+  const all = store.get(P + "pages", []);
+  const order = Math.max(0, ...all.filter(p => (p.parent || null) === (parent || null)).map(p => (p.order || 0) + 1));
+  return { id: uid(), parent: parent || null, order, fav: false, trashed: false, deleted: false, blog: null, at: Date.now(), ...tpl.make(), ...extra };
+};
+const pageFromBlog = b => {
+  const lessons = (b.lessons || []).slice(0, 6).map(l => B("bullet", stripTags(l.t + (l.k ? ": " + l.k : ""))));
+  const steps = ((b.plan && b.plan.items) || []).slice(0, 6).map(t => B("todo", stripTags(t)));
+  return {
+    title: "Notes: " + b.title, icon: "📖", blog: { id: b.id, title: b.title },
+    blocks: [...(b.summary ? [B("callout", stripTags(b.summary))] : []), B("h", "Key ideas"), ...(lessons.length ? lessons : [B("bullet")]),
+      B("h", "What I'll try"), ...(steps.length ? steps : [B("todo")]), B("h", "My thoughts"), B("p")]
+  };
+};
+/* a page is visible when neither it nor any parent is trashed or deleted */
+const liveIn = pages => { const by = new Map(pages.map(p => [p.id, p])); return p => { let x = p, n = 0; while (x && n++ < 50) { if (x.trashed || x.deleted) return false; x = x.parent ? by.get(x.parent) : null; } return true; }; };
+const kids = (pages, parent) => pages.filter(p => (p.parent || null) === parent && !p.trashed && !p.deleted).sort((a, b) => (a.order || 0) - (b.order || 0));
+const pageText = p => [p.title, ...(p.blocks || []).map(b => [b.text, b.body, ...((b.rows || []).map(r => r.name))].join(" "))].join(" ").toLowerCase();
+const ago = t => { const s = (Date.now() - t) / 1000; if (s < 3600 * 20) return new Date(t).toDateString() === new Date().toDateString() ? "Today" : "Yesterday"; const d = Math.round(s / 86400); return d < 7 ? d + "d" : new Date(t).toLocaleDateString(undefined, { day: "numeric", month: "short" }); };
+
+/* sync: pages live on the device (localStorage) and, when signed in on the hosted site, in Supabase table "pages" */
+function usePageSync(setPages) {
+  const [st, setSt] = useState({ mode: HOSTED() ? "checking" : "local", email: "" });
+  const user = useRef(null);
+  const synced = useRef(store.get(P + "pages-synced", { uid: "", map: {} }));
+  const timer = useRef(null);
+  const push = async () => {
+    const sb = sbClient(), id = user.current; if (!sb || !id) return;
+    const m = synced.current.map, all = store.get(P + "pages", []);
+    const dirty = all.filter(p => (p.at || 0) > (m[p.id] || 0)); if (!dirty.length) return;
+    setSt(s => ({ ...s, mode: "syncing" }));
+    const { error } = await sb.from("pages").upsert(dirty.map(p => ({ user_id: id, id: p.id, data: p, updated_at: p.at || 0 })));
+    if (error) { setSt(s => ({ ...s, mode: "error" })); return; }
+    dirty.forEach(p => { m[p.id] = p.at || 0; }); store.set(P + "pages-synced", synced.current);
+    setSt(s => ({ ...s, mode: "synced" }));
+  };
+  const pull = async () => {
+    const sb = sbClient(); if (!sb || !HOSTED()) { setSt({ mode: "local", email: "" }); return; }
+    try {
+      const { data } = await sb.auth.getSession(); const u = data && data.session && data.session.user;
+      if (!u) { user.current = null; setSt({ mode: "signedout", email: "" }); return; }
+      user.current = u.id; setSt({ mode: "syncing", email: u.email || "" });
+      if (synced.current.uid !== u.id) synced.current = { uid: u.id, map: {} };
+      const { data: rows, error } = await sb.from("pages").select("id,data,updated_at");
+      if (error) throw error;
+      const m = synced.current.map;
+      setPages(local => {
+        const by = new Map(local.map(p => [p.id, p]));
+        (rows || []).forEach(r => { const l = by.get(r.id); if (!l || r.updated_at > (l.at || 0)) by.set(r.id, { ...r.data, at: r.updated_at }); m[r.id] = r.updated_at; });
+        return [...by.values()];
+      });
+      store.set(P + "pages-synced", synced.current);
+      await push();
+      setSt(s => s.mode === "error" ? s : { ...s, mode: "synced" });
+    } catch (e) { setSt(s => ({ ...s, mode: "error" })); }
+  };
+  useEffect(() => {
+    pull();
+    const sb = sbClient(); let sub = null;
+    if (sb && HOSTED()) { const r = sb.auth.onAuthStateChange(ev => { if (ev === "SIGNED_IN" || ev === "SIGNED_OUT") pull(); }); sub = r && r.data && r.data.subscription; }
+    const vis = () => { if (document.visibilityState === "visible" && user.current) pull(); };
+    const on = () => push();
+    document.addEventListener("visibilitychange", vis); window.addEventListener("online", on);
+    return () => { if (sub) sub.unsubscribe(); document.removeEventListener("visibilitychange", vis); window.removeEventListener("online", on); };
+  }, []);
+  const changed = () => { if (!user.current) return; clearTimeout(timer.current); timer.current = setTimeout(push, 1200); };
+  return [st, changed];
+}
+
+/* drag to reorder with pointer (mouse + touch); arrow keys on the handle also move */
+function useDragSort(onMove) {
+  const [drag, setDrag] = useState(null);
+  const box = useRef(null);
+  const start = (e, i) => {
+    if (e.button > 0) return;
+    e.preventDefault();
+    const items = [...box.current.querySelectorAll(":scope > [data-sort]")];
+    const rects = items.map(n => n.getBoundingClientRect());
+    const el = e.currentTarget; try { el.setPointerCapture(e.pointerId); } catch (x) {}
+    let to = i; setDrag({ from: i, to: i });
+    const mv = ev => { const y = ev.clientY; let t = rects.findIndex(r => y < r.top + r.height / 2); if (t < 0) t = rects.length; to = t; setDrag({ from: i, to: t }); };
+    const up = () => { el.removeEventListener("pointermove", mv); el.removeEventListener("pointerup", up); el.removeEventListener("pointercancel", up); setDrag(null); const dest = to > i ? to - 1 : to; if (dest !== i) onMove(i, dest); };
+    el.addEventListener("pointermove", mv); el.addEventListener("pointerup", up); el.addEventListener("pointercancel", up);
+  };
+  const key = (e, i, n) => { if (e.key === "ArrowUp" && i > 0) { e.preventDefault(); onMove(i, i - 1); } if (e.key === "ArrowDown" && i < n - 1) { e.preventDefault(); onMove(i, i + 1); } };
+  const cls = (i, n) => !drag ? "" : (drag.from === i ? " dragging" : "") + (drag.to === i && drag.to !== drag.from && drag.to !== drag.from + 1 ? " drop" : "") + (i === n - 1 && drag.to === n && drag.from !== n - 1 ? " dropend" : "");
+  return { box, start, key, cls };
+}
+const move = (arr, a, b) => { const x = arr.slice(); const [it] = x.splice(a, 1); x.splice(b, 0, it); return x; };
+const GRIP = html`<svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor" aria-hidden="true"><circle cx="3" cy="3" r="1.5"/><circle cx="9" cy="3" r="1.5"/><circle cx="3" cy="8" r="1.5"/><circle cx="9" cy="8" r="1.5"/><circle cx="3" cy="13" r="1.5"/><circle cx="9" cy="13" r="1.5"/></svg>`;
+const CARET = html`<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 4l10 8-10 8z"/></svg>`;
+const SEARCH = html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>`;
+const TRASH = html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>`;
+
+function AutoText({ value, onChange, onKeyDown, onFocus, placeholder, cls, focus, label }) {
+  const r = useRef(null);
+  React.useLayoutEffect(() => { const el = r.current; if (el) { el.style.height = "auto"; el.style.height = el.scrollHeight + "px"; } }, [value]);
+  useEffect(() => { if (focus && r.current) { const el = r.current; el.focus(); const n = el.value.length; try { el.setSelectionRange(n, n); } catch (x) {} } }, [focus]);
+  return html`<textarea ref=${r} rows="1" class=${"btext " + (cls || "")} value=${value || ""} placeholder=${placeholder} aria-label=${label || placeholder}
+    onInput=${e => onChange(e.target.value)} onKeyDown=${onKeyDown} onFocus=${onFocus}></textarea>`;
+}
+
+/* ---- Pages home (inside Journal) ---- */
+function PageTree({ pages, setPages, parent, depth, openPage, openSet, toggleOpen }) {
+  const list = kids(pages, parent);
+  const reorder = (a, b) => { const ids = move(list, a, b).map(p => p.id); const now = Date.now(); setPages(all => all.map(p => ids.includes(p.id) ? { ...p, order: ids.indexOf(p.id), at: now } : p)); };
+  const ds = useDragSort(reorder);
+  if (!list.length) return null;
+  return html`<div class=${depth ? "pg-sub" : ""} ref=${ds.box}>${list.map((p, i) => {
+    const sub = kids(pages, p.id), open = openSet.includes(p.id);
+    return html`<${React.Fragment} key=${p.id}>
+      <div class=${"pg-row" + ds.cls(i, list.length)} data-sort="1" style=${{ paddingLeft: 6 + depth * 22 }}>
+        ${sub.length ? html`<button class="pg-car" aria-expanded=${open} aria-label=${(open ? "Hide" : "Show") + " sub-pages of " + (p.title || "Untitled")} onClick=${() => toggleOpen(p.id)}>${CARET}</button>` : html`<span class="pg-car" aria-hidden="true"></span>`}
+        <button class="pg-open" onClick=${() => openPage(p.id)}><span class="e" aria-hidden="true">${p.icon || "📝"}</span><b>${p.title || "Untitled"}</b>
+          <small>${sub.length ? sub.length + (sub.length === 1 ? " sub-page" : " sub-pages") : p.blog ? "Blog" : ago(p.at || Date.now())}</small></button>
+        <button class="pg-grip" aria-label=${"Reorder " + (p.title || "Untitled") + ": drag, or use arrow keys"} onPointerDown=${e => ds.start(e, i)} onKeyDown=${e => ds.key(e, i, list.length)}>${GRIP}</button>
+      </div>
+      ${open && html`<${PageTree} pages=${pages} setPages=${setPages} parent=${p.id} depth=${depth + 1} openPage=${openPage} openSet=${openSet} toggleOpen=${toggleOpen} />`}
+    </${React.Fragment}>`;
+  })}</div>`;
+}
+
+function SyncLine({ sync }) {
+  const [show, setShow] = useState(false);
+  const m = sync.mode;
+  const txt = m === "synced" ? "Synced to " + (sync.email || "your account") : m === "syncing" || m === "checking" ? "Syncing…" : m === "error" ? "Couldn't sync just now. Your pages are safe on this device." : "Saved on this device";
+  return html`<div>
+    <div class="pg-sync" role="status"><span aria-hidden="true">${m === "synced" ? "☁︎" : m === "error" ? "!" : "●"}</span><span>${txt}</span>
+      ${m === "signedout" && !show && html`<button onClick=${() => setShow(true)}>Sign in to sync</button>`}</div>
+    ${m === "signedout" && show && html`<div class="card pg-signin"><${SignIn} title="Sign in to sync your pages" note="Open it on this device. Your pages will then follow you to any phone or computer." /></div>`}
+  </div>`;
+}
+
+function PagesHome({ pages, setPages, openPage, sync, trashView, setTrashView, toast }) {
+  const [q, setQ] = useStored("pages-q", "");
+  const [openSet, setOpenSet] = useStored("pages-open", []);
+  const toggleOpen = id => setOpenSet(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]);
+  const live = liveIn(pages);
+  const alive = pages.filter(live);
+  const favs = alive.filter(p => p.fav);
+  const trash = pages.filter(p => p.trashed && !p.deleted);
+  if (trashView) return html`<div>
+    <div class="row-between" style=${{ marginTop: 16 }}><h2>Trash</h2><button class="link" onClick=${() => setTrashView(false)}>Back to pages</button></div>
+    <p class="small muted" style=${{ margin: "4px 0 0" }}>Restore a page, or delete it for good. Sub-pages go with it.</p>
+    ${trash.length ? html`<div class="card pg-list" style=${{ marginTop: 12 }}>${trash.map(p => html`<div key=${p.id} class="pg-row">
+        <span class="pg-open" style=${{ paddingLeft: 8 }}><span class="e" aria-hidden="true">${p.icon || "📝"}</span><b>${p.title || "Untitled"}</b></span>
+        <button class="pillbtn" onClick=${() => setPages(all => all.map(x => x.id === p.id ? { ...x, trashed: false, at: Date.now() } : x))}>Restore</button>
+        <button class="pg-x" aria-label=${"Delete " + (p.title || "Untitled") + " for good"} onClick=${() => { const gone = new Set([p.id]); let grew = true; while (grew) { grew = false; pages.forEach(x => { if (x.parent && gone.has(x.parent) && !gone.has(x.id)) { gone.add(x.id); grew = true; } }); }
+          setPages(all => all.map(x => gone.has(x.id) ? { id: x.id, parent: x.parent, deleted: true, at: Date.now() } : x)); toast("Deleted for good"); }}>${I.close}</button></div>`)}</div>`
+      : html`<div class="card empty" style=${{ marginTop: 12 }}><b>Trash is empty</b>Pages you remove land here first.</div>`}
+  </div>`;
+  const ql = q.trim().toLowerCase();
+  const hits = ql ? alive.filter(p => pageText(p).includes(ql)).sort((a, b) => (b.at || 0) - (a.at || 0)) : [];
+  const row = p => html`<div key=${p.id} class="pg-row"><span class="pg-car" aria-hidden="true"></span>
+    <button class="pg-open" onClick=${() => openPage(p.id)}><span class="e" aria-hidden="true">${p.icon || "📝"}</span><b>${p.title || "Untitled"}</b><small>${ago(p.at || Date.now())}</small></button></div>`;
+  return html`<div>
+    <label class="pg-search">${SEARCH}<input type="search" placeholder="Search pages" aria-label="Search pages" value=${q} onInput=${e => setQ(e.target.value)} /></label>
+    ${ql ? html`<p class="pg-lbl">${hits.length} result${hits.length === 1 ? "" : "s"}</p>
+        ${hits.length ? html`<div class="card pg-list">${hits.map(row)}</div>` : html`<div class="card empty"><b>No pages match</b>Try another word.</div>`}`
+      : html`
+        ${favs.length > 0 && html`<p class="pg-lbl">★ Favourites</p><div class="card pg-list">${favs.map(row)}</div>`}
+        <p class="pg-lbl">All pages</p>
+        ${kids(pages, null).length ? html`<div class="card pg-list"><${PageTree} pages=${pages} setPages=${setPages} parent=${null} depth=${0} openPage=${openPage} openSet=${openSet} toggleOpen=${toggleOpen} /></div>`
+          : html`<div class="card empty"><b>No pages yet</b>Start one for goals, habits, or notes on a blog you loved.</div>`}`}
+    <${SyncLine} sync=${sync} />
+    ${trash.length > 0 && html`<button class="pg-trashlink" onClick=${() => setTrashView(true)}>${TRASH}Trash (${trash.length})</button>`}
+  </div>`;
+}
+
+function TemplateSheet({ close, pick }) {
+  const [sel, setSel] = useState("blank");
+  const t = TEMPLATES.find(x => x.id === sel);
+  useEffect(() => { const k = e => { if (e.key === "Escape") close(); }; window.addEventListener("keydown", k); return () => window.removeEventListener("keydown", k); }, []);
+  return html`<div class="pg-dim" onClick=${e => { if (e.target === e.currentTarget) close(); }}>
+    <div class="pg-sheet" role="dialog" aria-modal="true" aria-label="Start a page">
+      <div class="pg-grab"></div>
+      <h2 style=${{ fontSize: 22, fontWeight: 800, letterSpacing: "-0.03em" }}>Start a page</h2>
+      <p class="small muted" style=${{ margin: "4px 0 0" }}>Pick a template or start blank.</p>
+      <div class="pg-grid">${TEMPLATES.map(x => html`<button key=${x.id} class="card pg-tp" aria-pressed=${sel === x.id} onClick=${() => setSel(x.id)} onDoubleClick=${() => pick(x)}>
+        <span class="e" aria-hidden="true">${x.e}</span><b>${x.t}</b><span>${x.d}</span></button>`)}</div>
+      <div style=${{ display: "flex", flexDirection: "column", gap: 8, marginTop: 14 }}>
+        <button class="cta" onClick=${() => pick(t)}>${sel === "blank" ? "Start blank page" : "Use " + t.t}</button>
+        <button class="cta ghost" onClick=${close}>Cancel</button></div>
+    </div></div>`;
+}
+
+/* ---- Page editor ---- */
+function HabitGrid({ b, set }) {
+  const fresh = b.week !== weekStart();
+  const rows = fresh ? b.rows.map(r => ({ ...r, days: [0, 0, 0, 0, 0, 0, 0] })) : b.rows;
+  const save = r => set({ rows: r, week: weekStart() });
+  const kept = rows.reduce((n, r) => n + r.days.filter(Boolean).length, 0);
+  const ti = todayIdx();
+  return html`<div class="card pg-hab">
+    <div class="pg-hrow pg-hhead"><span>This week</span><div class="pg-hdays">${DAYS.map((d, i) => html`<span key=${i} style=${i === ti ? { color: "var(--ink)", fontWeight: 700 } : null}>${d}</span>`)}</div></div>
+    ${rows.map((r, ri) => html`<div key=${r.id} class="pg-hrow">
+      <div class="pg-hname"><input value=${r.name} placeholder="Name a habit" aria-label=${"Habit " + (ri + 1)} onInput=${e => save(rows.map(x => x.id === r.id ? { ...x, name: e.target.value } : x))} />
+        <button class="pg-x" aria-label=${"Remove habit " + (r.name || ri + 1)} onClick=${() => save(rows.filter(x => x.id !== r.id))}>${I.close}</button></div>
+      <div class="pg-hdays">${r.days.map((v, di) => html`<button key=${di} class="pg-day" aria-pressed=${!!v} aria-label=${(r.name || "Habit") + ", " + ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"][di]} onClick=${() => save(rows.map(x => x.id === r.id ? { ...x, days: x.days.map((d, k) => k === di ? (d ? 0 : 1) : d) } : x))}>${v ? I.check(12) : null}</button>`)}</div>
+    </div>`)}
+    <div class="row-between"><span class="muted">${kept} tick${kept === 1 ? "" : "s"} this week</span>
+      ${rows.length < 5 && html`<button onClick=${() => save([...rows, habitRow()])}>+ Add habit</button>`}</div>
+  </div>`;
+}
+
+function PageView({ id, pages, setPages, openPage, back, openBlog, trash, go }) {
+  const page = pages.find(p => p.id === id);
+  const [focus, setFocus] = useState({ id: null, n: 0 });
+  const [active, setActive] = useState(null);
+  const [hi, setHi] = useState(0);
+  const [emoji, setEmoji] = useState(false);
+  const [more, setMore] = useState(false);
+  const titleRef = useRef(null);
+  useEffect(() => { if (page && !page.title && titleRef.current) titleRef.current.focus(); }, [id]);
+  React.useLayoutEffect(() => { const el = titleRef.current; if (el) { el.style.height = "auto"; el.style.height = el.scrollHeight + "px"; } });
+  const ds = useDragSort((a, c) => upd(p => ({ blocks: move(p.blocks || [], a, c) })));
+  if (!page || page.deleted) return html`<main class="screen"><${Brand} /><button class="round iconbtn" onClick=${back} aria-label="Back">${I.back}</button><div class="card empty" style=${{ marginTop: 20 }}><b>Page not found</b>It may have been deleted.</div></main>`;
+  const upd = f => setPages(all => all.map(p => p.id === id ? { ...p, ...(typeof f === "function" ? f(p) : f), at: Date.now() } : p));
+  const blocks = page.blocks || [];
+  const setBlocks = f => upd(p => ({ blocks: f(p.blocks || []) }));
+  const setB = (bid, v) => setBlocks(bs => bs.map(b => b.id === bid ? { ...b, ...v } : b));
+  const focusOn = bid => setFocus(f => ({ id: bid, n: f.n + 1 }));
+  const insertAfter = (bid, nb) => { setBlocks(bs => { const i = bs.findIndex(b => b.id === bid); const x = bs.slice(); x.splice(i < 0 ? x.length : i + 1, 0, nb); return x; }); focusOn(nb.id); };
+  const remove = bid => { const i = blocks.findIndex(b => b.id === bid); const prev = blocks.slice(0, i).reverse().find(b => TEXTY.includes(b.type)); setBlocks(bs => bs.filter(b => b.id !== bid)); if (prev) focusOn(prev.id); };
+  const subPage = (bid, replace) => { const np = newPage(id); const blk = B("page", "", { page: np.id }); setPages(all => [...all.map(p => p.id === id ? { ...p, at: Date.now(), blocks: (() => { const bs = (p.blocks || []).slice(); const i = bs.findIndex(b => b.id === bid); if (i >= 0 && (replace || !bs[i].text)) bs.splice(i, 1, blk); else bs.splice(i < 0 ? bs.length : i + 1, 0, blk); return bs; })() } : p), np]); openPage(np.id); };
+  const choose = (b, type) => {
+    setActive(null); setHi(0);
+    if (type === "page") return subPage(b.id, true);
+    const extra = type === "habits" ? { week: weekStart(), rows: [habitRow(), habitRow()] } : type === "toggle" ? { body: "", open: true } : {};
+    setB(b.id, { type, text: "", checked: false, ...extra });
+    if (type === "divider" || type === "habits") insertAfter(b.id, B("p")); else focusOn(b.id);
+  };
+  const menuFor = b => { const t = b.text || ""; if (active !== b.id || !t.startsWith("/") || t.length > 14) return null; const f = t.slice(1).toLowerCase(); return BLOCK_TYPES.filter(x => !f || x[1].toLowerCase().includes(f) || x[0].startsWith(f)); };
+  const onKey = (e, b) => {
+    const m = menuFor(b);
+    if (m && m.length) {
+      if (e.key === "ArrowDown") { e.preventDefault(); setHi(h => (h + 1) % m.length); return; }
+      if (e.key === "ArrowUp") { e.preventDefault(); setHi(h => (h - 1 + m.length) % m.length); return; }
+      if (e.key === "Enter") { e.preventDefault(); choose(b, m[Math.min(hi, m.length - 1)][0]); return; }
+      if (e.key === "Escape") { e.preventDefault(); setB(b.id, { text: "" }); return; }
+    }
+    if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
+      e.preventDefault();
+      const list = ["todo", "bullet"].includes(b.type);
+      if (list && !b.text) { setB(b.id, { type: "p" }); return; }
+      insertAfter(b.id, B(list ? b.type : "p"));
+    } else if (e.key === "Backspace" && !b.text && e.target.selectionStart === 0) {
+      e.preventDefault();
+      if (b.type !== "p") setB(b.id, { type: "p" }); else if (blocks.length > 1) remove(b.id);
+    }
+  };
+  const crumbs = []; let c = page.parent ? pages.find(p => p.id === page.parent) : null, n = 0;
+  while (c && n++ < 6) { crumbs.unshift(c); c = c.parent ? pages.find(p => p.id === c.parent) : null; }
+  const txt = (b, cls) => html`<${AutoText} value=${b.text} cls=${cls} placeholder=${b.ph || PLACE[b.type] || ""} label=${(BLOCK_TYPES.find(x => x[0] === b.type) || [])[1]}
+    focus=${focus.id === b.id ? focus.n : 0} onFocus=${() => { setActive(b.id); setHi(0); }} onChange=${v => { setB(b.id, { text: v }); setHi(0); }} onKeyDown=${e => onKey(e, b)} />`;
+  const body = b => {
+    if (b.type === "h") return txt(b, "h");
+    if (b.type === "todo") return html`<button class="pg-check" role="checkbox" aria-checked=${!!b.checked} aria-label="Done" onClick=${() => setB(b.id, { checked: !b.checked })}>${b.checked ? I.check(12) : null}</button>${txt(b, b.checked ? "done" : "")}`;
+    if (b.type === "bullet") return html`<span class="pg-dot" aria-hidden="true">•</span>${txt(b)}`;
+    if (b.type === "quote") return html`<div class="pg-quote" style=${{ flex: 1, display: "flex" }}>${txt(b, "quote")}</div>`;
+    if (b.type === "callout") return html`<div class="pg-callout"><span aria-hidden="true">💡</span>${txt(b)}</div>`;
+    if (b.type === "toggle") return html`<button class="pg-tog" aria-expanded=${!!b.open} aria-label=${b.open ? "Hide details" : "Show details"} onClick=${() => setB(b.id, { open: !b.open })}>${CARET}</button>${txt(b, "tog")}`;
+    if (b.type === "divider") return html`<div class="pg-hr" role="separator"></div><button class="pg-x" aria-label="Remove divider" onClick=${() => remove(b.id)}>${I.close}</button>`;
+    if (b.type === "habits") return html`<${HabitGrid} b=${b} set=${v => setB(b.id, v)} /><button class="pg-x" aria-label="Remove habit tracker" onClick=${() => remove(b.id)}>${I.close}</button>`;
+    if (b.type === "page") { const sp = pages.find(p => p.id === b.page); const gone = !sp || sp.deleted || sp.trashed;
+      return html`<button class="pg-link" disabled=${gone} onClick=${() => openPage(b.page)}><span aria-hidden="true">${gone ? "📄" : sp.icon || "📄"}</span>${gone ? "(page removed)" : sp.title || "Untitled"}</button>
+        <button class="pg-x" aria-label="Remove link to sub-page" onClick=${() => remove(b.id)}>${I.close}</button>`; }
+    return txt(b);
+  };
+  return html`<main class="screen" onClick=${() => { if (more) setMore(false); }}>
+    <${Brand} />
+    <div class="row-between" style=${{ position: "relative" }}>
+      <button class="round iconbtn" onClick=${back} aria-label="Back">${I.back}</button>
+      <span class="pg-crumb">${["Pages", ...crumbs.map(x => x.title || "Untitled")].join(" › ")}</span>
+      <button class="round iconbtn" aria-label="Page options" aria-expanded=${more} onClick=${e => { e.stopPropagation(); setMore(!more); }} style=${{ fontWeight: 800, letterSpacing: 1 }}>⋯</button>
+      ${more && html`<div class="card pg-more" role="menu" onClick=${e => e.stopPropagation()}>
+        <button class="pg-mi" role="menuitem" onClick=${() => { upd({ fav: !page.fav }); setMore(false); }}><i>★</i>${page.fav ? "Remove from favourites" : "Add to favourites"}</button>
+        <button class="pg-mi" role="menuitem" onClick=${() => { setMore(false); subPage(null); }}><i>📄</i>Add a sub-page</button>
+        <button class="pg-mi" role="menuitem" onClick=${() => { setMore(false); trash(id); }}><i>${TRASH}</i>Move to trash</button></div>`}
+    </div>
+    <div><button class="pg-icon" aria-label="Change icon" aria-expanded=${emoji} onClick=${() => setEmoji(!emoji)}>${page.icon || "📝"}</button></div>
+    ${emoji && html`<div class="card pg-emojis">${PAGE_ICONS.map(x => html`<button key=${x} aria-label=${"Use " + x} onClick=${() => { upd({ icon: x }); setEmoji(false); }}>${x}</button>`)}</div>`}
+    <textarea ref=${titleRef} class="pg-title" rows="1" placeholder="Untitled" aria-label="Page title" value=${page.title}
+      onInput=${e => upd({ title: e.target.value.replace(/\n/g, "") })} onKeyDown=${e => { if (e.key === "Enter") { e.preventDefault(); const f = blocks.find(b => TEXTY.includes(b.type)); if (f) focusOn(f.id); else { const nb = B("p"); setBlocks(bs => [nb, ...bs]); focusOn(nb.id); } } }}></textarea>
+    ${page.blog && html`<div><button class="pg-bloglink" onClick=${() => openBlog(page.blog.id)}>${I.cards}Linked blog: <b>${page.blog.title}</b></button></div>`}
+    <div class="pg-blocks" ref=${ds.box}>${blocks.map((b, i) => { const m = menuFor(b); return html`<div key=${b.id} data-sort="1">
+      <div class=${"pg-blk" + ds.cls(i, blocks.length)}>
+        <button class="pg-grip" aria-label="Move block: drag, or use arrow keys" onPointerDown=${e => ds.start(e, i)} onKeyDown=${e => ds.key(e, i, blocks.length)}>${GRIP}</button>
+        <div class="pg-body">${body(b)}</div></div>
+      ${b.type === "toggle" && b.open && html`<div class="pg-togbody"><${AutoText} value=${b.body} placeholder="Details inside the toggle" label="Toggle details" onChange=${v => setB(b.id, { body: v })} /></div>`}
+      ${m && html`<div class="card pg-menu" role="listbox" aria-label="Add a block">
+        <div class="k">${m.length ? "ADD A BLOCK" : "NO MATCH"}</div>
+        ${m.map((x, k) => html`<button key=${x[0]} role="option" aria-selected=${k === hi} class=${"pg-mi" + (k === hi ? " hi" : "")} onMouseDown=${e => e.preventDefault()} onClick=${() => choose(b, x[0])}>
+          <i aria-hidden="true">${x[3]}</i><span>${x[1]}<small>${x[2]}</small></span></button>`)}</div>`}
+    </div>`; })}</div>
+    <button class="pg-add" onClick=${() => { const nb = B("p", "/"); setBlocks(bs => [...bs, nb]); setActive(nb.id); focusOn(nb.id); }}>＋ Add a block</button>
+    <p class="small muted" style=${{ margin: "18px 0 28px" }}>Tip: type / in any line to change it into a heading, checklist, toggle and more.</p>
+    <div class="grow"></div>
+    <div class="foot"><${Tabs} tab="journal" go=${go} /></div>
+  </main>`;
+}
+
+const Brand = () => html`<div class="brandbar"><div class="logo" role="img" aria-label="QalamStorys"><span class="lq" aria-hidden="true">Qalam</span><span class="ls" aria-hidden="true">Storys</span></div></div>`;
 function Tabs({ tab, go }) {
   const T = [["today", "Today", I.sun], ["journal", "Journal", I.book], ["blogs", "Blogs", I.cards], ["community", "Community", I.people], ["progress", "Progress", I.chart]];
   return html`<nav class="tabbar" aria-label="Tabs">${T.map(([id, label, icon]) => html`
@@ -1089,6 +1539,20 @@ function App() {
   const [editing, setEditing] = useState(null);
   const [blogId, setBlogId] = useState(null);
   const [draft, setDraft] = useState(null);
+  const [pages, setPagesRaw] = useStored("pages", []);
+  const [pageSync, pagesChanged] = usePageSync(setPagesRaw);
+  const setPages = f => { setPagesRaw(f); pagesChanged(); };
+  const [pageId, setPageId] = useState(() => store.get(P + "page", null));
+  const [jseg, setJseg] = useStored("jseg", "entries");
+  const [tplOpen, setTplOpen] = useState(false);
+  const [trashView, setTrashView] = useState(false);
+  const [toastMsg, setToastMsg] = useState(null);
+  const toastT = useRef(null);
+  const toast = (text, undo) => { clearTimeout(toastT.current); setToastMsg({ text, undo }); toastT.current = setTimeout(() => setToastMsg(null), 5000); };
+  const openPage = id => { setPageId(id); store.set(P + "page", id); setView("page"); window.scrollTo(0, 0); };
+  const trashPage = id => { setPages(all => all.map(x => x.id === id ? { ...x, trashed: true, at: Date.now() } : x)); setJseg("pages"); go("journal");
+    toast("Moved to trash", () => setPages(all => all.map(x => x.id === id ? { ...x, trashed: false, at: Date.now() } : x))); };
+  const blogPage = id => pages.find(p => p.blog && p.blog.id === id && !p.deleted && !p.trashed);
   const [dark, setDark] = useState(() => { const t = store.get(P + "theme", null); if (t) document.documentElement.dataset.theme = t; return t ? t === "dark" : !!(window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches); });
   const toggleTheme = () => { const t = dark ? "light" : "dark"; document.documentElement.dataset.theme = t; store.set(P + "theme", t); setDark(!dark); };
   const today = dayKey();
@@ -1103,18 +1567,27 @@ function App() {
   const comeback = Object.values(log).some(v => v.w > 0) && !done.length && gap >= 2 && store.get(P + "comeback", "") !== today && !rest.includes(today) ? gap : 0;
   useEffect(() => { document.body.style.background = focus !== null ? "#1E1B4B" : ""; }, [focus]);
 
+  const toastEl = toastMsg && html`<div class="pg-toast" role="status">${toastMsg.text}${toastMsg.undo && html`<button onClick=${() => { toastMsg.undo(); setToastMsg(null); }}>Undo</button>`}</div>`;
+  if (view === "page" && pageId) return html`<${React.Fragment}><${PageView} go=${go} key=${pageId} id=${pageId} pages=${pages} setPages=${setPages} openPage=${openPage} trash=${trashPage}
+    back=${() => { const p = pages.find(x => x.id === pageId); const up = p && p.parent && pages.find(x => x.id === p.parent && !x.trashed && !x.deleted); if (up) openPage(up.id); else { setJseg("pages"); go("journal"); } }}
+    openBlog=${bid => { if (BLOGS.some(b => b.id === bid)) { setBlogId(bid); setView("blog"); window.scrollTo(0, 0); } }} />${toastEl}</${React.Fragment}>`;
   if (view === "onboarding") return html`<${Onboarding} profile=${profile} done=${p => { setProfile(p); go("today"); }} />`;
   if (focus !== null) return html`<${Focus} win=${wins[focus] || wins[0]} idx=${focus} total=${wins.length} close=${() => setFocus(null)}
     did=${(mins, secs) => { const w = wins[focus] || wins[0]; if (!done.includes(w.id)) setDone([...done, w.id]); setLog(l => ({ ...l, [today]: { ...(l[today] || {}), w: Math.max(((l[today] || {}).w || 0), done.includes(w.id) ? done.length : done.length + 1), m: ((l[today] || {}).m || 0) + mins } })); setDoneInfo({ idx: focus, secs }); setFocus(null); setView("done"); }} />`;
   if (view === "done" && doneInfo) return html`<${Done} idx=${doneInfo.idx} total=${wins.length} secs=${doneInfo.secs} go=${go} />`;
-  if (view === "journalWrite") return html`<${JournalWrite} entry=${editing ? journal.find(e => e.at === editing) : null} draft=${editing ? null : draft}
+  if (view === "journalWrite") return html`<${JournalWrite} go=${go} entry=${editing ? journal.find(e => e.at === editing) : null} draft=${editing ? null : draft}
     close=${() => { if (!editing && draft && draft.blog) { setDraft(null); setView("blog"); window.scrollTo(0, 0); } else go(editing ? "journal" : store.get(P + "tab", "today")); }}
     save=${e => { setJournal(j => [e, ...j.filter(x => x.at !== e.at)].sort((a, b) => b.at - a.at)); setEditing(null); setDraft(null); go("journal"); }} />`;
-  if (view === "journal") return html`<${Journal} go=${go} journal=${journal} log=${log} open=${at => { setEditing(at); setView("journalWrite"); window.scrollTo(0, 0); }} />`;
-  if (view === "blog" && blogId) return html`<${BlogPost} id=${blogId} back=${() => go("blogs")}
+  if (view === "journal") return html`<${React.Fragment}><${Journal} go=${go} journal=${journal} log=${log} open=${at => { setEditing(at); setView("journalWrite"); window.scrollTo(0, 0); }}
+    seg=${jseg} setSeg=${s => { setJseg(s); setTrashView(false); }}
+    pagesUI=${html`<${PagesHome} pages=${pages} setPages=${setPages} openPage=${openPage} sync=${pageSync} trashView=${trashView} setTrashView=${setTrashView} toast=${toast} />`}
+    newPageCta=${html`<button class="cta" onClick=${() => setTplOpen(true)}>＋ New page</button>`} />
+    ${tplOpen && html`<${TemplateSheet} close=${() => setTplOpen(false)} pick=${t => { const np = newPage(null, t); setPages(all => [...all, np]); setTplOpen(false); openPage(np.id); }} />`}${toastEl}</${React.Fragment}>`;
+  if (view === "blog" && blogId) return html`<${BlogPost} go=${go} id=${blogId} back=${() => go("blogs")} hasPage=${id => !!blogPage(id)}
+    toPages=${b => { const ex = blogPage(b.id); if (ex) return openPage(ex.id); const np = newPage(null, { make: () => pageFromBlog(b) }); setPages(all => [...all, np]); openPage(np.id); }}
     toJournal=${(b, step) => { setEditing(null); setDraft({ text: step, tags: step ? ["Idea"] : [], blog: { id: b.id, title: b.title } }); setView("journalWrite"); window.scrollTo(0, 0); }} />`;
   if (view === "blogs") return html`<${Blogs} go=${go} open=${id => { setBlogId(id); setView("blog"); window.scrollTo(0, 0); }} />`;
-  if (view === "editWins") return html`<${EditWins} profile=${profile} back=${() => go("today")} save=${w => { setProfile({ ...profile, wins: w }); go("today"); }} />`;
+  if (view === "editWins") return html`<${EditWins} go=${go} profile=${profile} back=${() => go("today")} save=${w => { setProfile({ ...profile, wins: w }); go("today"); }} />`;
   if (view === "community") return html`<${Community} go=${go} profile=${profile} />`;
   if (view === "circle") return html`<${Circle} go=${go} profile=${profile} log=${log} />`;
   if (view === "progress") return html`<${Progress} go=${go} log=${log} journal=${journal} dark=${dark} setTheme=${toggleTheme} />`;
