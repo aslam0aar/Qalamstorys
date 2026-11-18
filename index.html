@@ -1126,7 +1126,8 @@ const BLOGS = [{"id": "ml-outlive-you", "topic": "Leadership", "title": "Build S
 const SUBSTACK = {
   "jr-one-daily-habit": "https://explainitsimply.substack.com/p/change-one-habit-and-watch-everything",
   "jr-one-percent-morning": { url: "https://explainitsimply.substack.com/p/the-14-minutes-that-run-your-day", from: "2026-11-17T05:35:00Z" },
-  "jr-set-your-sail": { url: "https://explainitsimply.substack.com/p/same-wind-different-sail", from: "2026-11-18T04:37:00Z" }
+  "jr-set-your-sail": { url: "https://explainitsimply.substack.com/p/same-wind-different-sail", from: "2026-11-18T04:37:00Z" },
+  "jr-start-late-finish-rich": { url: "https://explainitsimply.substack.com/p/start-late-finish-rich", from: "2026-11-19T06:20:00Z" }
 };
 /* A scheduled article can be { url, from }: the link appears once the "from" time has passed. */
 const substackUrl = id => { const v = SUBSTACK[id]; if (!v) return null; if (typeof v === "string") return v; return !v.from || Date.now() >= Date.parse(v.from) ? v.url : null; };
