@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Information Security Quiz</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: single centred column (max 680px) — start card, one question per screen, result card; admin table widens to 1100px */
+:root {
+  --bg: #F3F5F9; --surface: #FFFFFF; --ink: #142033; --ink-2: #4E5B70; --ink-3: #7A869A;
+  --line: #DCE2EC; --brand: #002D62; --accent: #0062A9; --ok: #2E7D32; --ok-bg: #E8F3E9;
+  --bad: #C62828; --bad-bg: #FBEAEA; --sel: #E6EFF8;
+  --display: "Space Grotesk", "Segoe UI", Arial, sans-serif; --body: "Inter", "Segoe UI", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0D1420; --surface: #16202F; --ink: #EEF2F8; --ink-2: #B4BFD0; --ink-3: #8592A6;
+  --line: #2A3647; --brand: #7FB2E5; --accent: #5AA6E8; --ok: #6CC070; --ok-bg: #16301B;
+  --bad: #EF7B7B; --bad-bg: #3A1A1A; --sel: #1D3048; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0D1420; --surface: #16202F; --ink: #EEF2F8; --ink-2: #B4BFD0; --ink-3: #8592A6;
+  --line: #2A3647; --brand: #7FB2E5; --accent: #5AA6E8; --ok: #6CC070; --ok-bg: #16301B;
+  --bad: #EF7B7B; --bad-bg: #3A1A1A; --sel: #1D3048; color-scheme: dark }
+* { box-sizing: border-box }
+html,body { margin:0 }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+.wrap { max-width: 680px; margin: 0 auto; display: grid; gap: 16px }
+.wrap.wide { max-width: 1100px }
+header.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap }
+.brand { font-family: var(--display); font-weight: 700; letter-spacing: .02em; color: var(--brand); font-size: 15px; text-transform: uppercase }
+.tabs { display: flex; gap: 6px }
+.tab { border: 1px solid var(--line); background: var(--surface); color: var(--ink-2); padding: 6px 12px; border-radius: 999px; font: 600 13px var(--body); cursor: pointer }
+.tab[aria-pressed="true"] { background: var(--brand); color: var(--surface); border-color: var(--brand) }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; display: grid; gap: 16px; min-width: 0 }
+h1 { font-family: var(--display); font-size: 30px; line-height: 1.15; margin: 0; text-wrap: balance }
+h2 { font-family: var(--display); font-size: 21px; line-height: 1.3; margin: 0; text-wrap: balance }
+p { margin: 0 }
+.muted { color: var(--ink-2) }
+.small { font-size: 13px; color: var(--ink-3) }
+.facts { display: flex; flex-wrap: wrap; gap: 8px }
+.fact { background: var(--bg); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; font-size: 13px; color: var(--ink-2) }
+label { font-weight: 600; font-size: 14px; display: grid; gap: 6px }
+input[type=text], input[type=search] { font: 16px var(--body); padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); color: var(--ink); width: 100% }
+input:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px }
+.btn { font: 600 16px var(--body); padding: 13px 20px; border-radius: 10px; border: 0; background: var(--brand); color: var(--surface); cursor: pointer }
+.btn:disabled { opacity: .45; cursor: not-allowed }
+.btn.ghost { background: transparent; color: var(--brand); border: 1px solid var(--line) }
+.row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: space-between; align-items: center }
+.progress { height: 6px; background: var(--line); border-radius: 999px; overflow: hidden }
+.progress > i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .25s }
+.topic { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--accent) }
+.opts { display: grid; gap: 10px }
+.opt { display: flex; gap: 12px; align-items: flex-start; text-align: left; font: 15px/1.5 var(--body); color: var(--ink); background: var(--surface); border: 1.5px solid var(--line); border-radius: 12px; padding: 13px 14px; cursor: pointer; width: 100% }
+.opt .key { flex: none; width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--line); display: grid; place-items: center; font-weight: 700; font-size: 13px; color: var(--ink-2) }
+.opt[aria-checked="true"] { border-color: var(--accent); background: var(--sel) }
+.opt[aria-checked="true"] .key { background: var(--accent); border-color: var(--accent); color: var(--surface) }
+.score { display: flex; align-items: baseline; gap: 8px }
+.score b { font-family: var(--display); font-size: 64px; line-height: 1; color: var(--brand); font-variant-numeric: tabular-nums }
+.score span { font-size: 22px; color: var(--ink-2) }
+.note { border-radius: 10px; padding: 10px 14px; font-size: 14px }
+.note.ok { background: var(--ok-bg); color: var(--ok) }
+.note.bad { background: var(--bad-bg); color: var(--bad) }
+.review { display: grid; gap: 12px }
+.rv { border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 6px }
+.rv .tag { font-size: 12px; font-weight: 700 }
+.rv .tag.ok { color: var(--ok) } .rv .tag.bad { color: var(--bad) }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px }
+table { border-collapse: collapse; width: 100%; font-size: 14px; font-variant-numeric: tabular-nums }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); white-space: nowrap }
+th { background: var(--bg); font-weight: 600; color: var(--ink-2); position: sticky; top: 0 }
+.pill { display: inline-block; padding: 2px 9px; border-radius: 999px; font-weight: 600; font-size: 12px }
+.pill.hi { background: var(--ok-bg); color: var(--ok) } .pill.lo { background: var(--bad-bg); color: var(--bad) }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px }
+.stat { background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px }
+.stat b { display: block; font-family: var(--display); font-size: 26px; color: var(--brand); font-variant-numeric: tabular-nums }
+@media (prefers-reduced-motion: reduce) { .progress > i { transition: none } }
+</style>
+
+</head><body>
+<div class="wrap" id="app">
+  <header class="top">
+    <div class="brand">Enova · Abu Dhabi Airports</div>
+    
+  </header>
+
+  <!-- START -->
+  <section class="card" id="vStart">
+    <h1>Information Security Quiz</h1>
+    <p class="muted">Acceptable Use of Information Assets and Information Security Awareness. Each time you open this quiz you get a new set of questions.</p>
+    <div class="facts"><span class="fact">20 questions</span><span class="fact">1 mark each · total 20</span><span class="fact">Drawn from a bank of 50</span></div>
+    <form id="startForm" novalidate class="card" style="padding:0;border:0">
+      <label for="empId">Employee ID number
+        <input type="text" id="empId" inputmode="text" autocomplete="off" placeholder="e.g. 30146" maxlength="20" required>
+      </label>
+      <label for="empName">Full name (optional)
+        <input type="text" id="empName" autocomplete="name" maxlength="60" placeholder="e.g. Ahmed Ali">
+      </label>
+      <p class="small" id="startErr" role="alert"></p>
+      <button class="btn" id="startBtn" type="submit">Start quiz</button>
+    </form>
+    <p class="small">Your score is saved against your employee ID.</p>
+  </section>
+
+  <!-- QUESTION -->
+  <section class="card" id="vQuiz" hidden>
+    <div class="row"><span class="small" id="qCount">Question 1 of 20</span><span class="small" id="qEmp"></span></div>
+    <div class="progress" aria-hidden="true"><i id="bar"></i></div>
+    <span class="topic" id="qTopic"></span>
+    <h2 id="qText"></h2>
+    <div class="opts" role="radiogroup" aria-labelledby="qText" id="opts"></div>
+    <div class="row">
+      <button class="btn ghost" id="prevBtn" type="button">Back</button>
+      <button class="btn" id="nextBtn" type="button" disabled>Next</button>
+    </div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="card" id="vResult" hidden>
+    <span class="small" id="rEmp"></span>
+    <div class="score"><b id="rScore">0</b><span>/ 20</span></div>
+    <p class="muted" id="rMsg"></p>
+    <div class="note" id="rSaved"></div>
+    <button class="btn" id="againBtn" type="button">Take a new quiz</button>
+    <h2>Review your answers</h2>
+    <div class="review" id="review"></div>
+  </section>
+
+  <!-- ADMIN -->
+  <section class="card" id="vLogin" hidden>
+    <h2>Quiz results</h2>
+    <form id="loginForm" class="card" style="padding:0;border:0">
+      <label for="pw">Results password<input type="password" id="pw" autocomplete="current-password" required></label>
+      <p class="small" id="loginErr" role="alert"></p>
+      <button class="btn" type="submit">View results</button>
+    </form>
+  </section>
+  <section class="card" id="vAdmin" hidden>
+    <div class="row"><h2>Quiz results</h2><div class="row" style="gap:8px"><button class="btn ghost" id="refreshBtn" type="button">Refresh</button><button class="btn ghost" id="csvBtn" type="button">Download CSV</button></div></div>
+    <div class="stats" id="stats"></div>
+    <label for="search">Search by employee ID or name<input type="search" id="search" placeholder="Employee ID or name"></label>
+    <p class="small" id="adminState">Loading results…</p>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Date &amp; time</th><th>Employee ID</th><th>Name</th><th>Score</th><th>%</th><th>Attempt</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </section>
+</div>
+
+<script>
+const BANK = [
+// ---- Acceptable Use of Information Assets Policy (AUP)
+{id:1,t:"Acceptable Use",q:"Who owns the information you create, store or send using company systems?",o:["The employee who created it","The organisation (ADA / the company)","The IT service provider","Anyone who has access to it"],a:1,e:"Information created or held on company systems is a company asset, not personal property."},
+{id:2,t:"Acceptable Use",q:"Which statement best describes acceptable personal use of company email and internet?",o:["Unlimited, as long as work is finished","Not allowed for any reason","Limited and occasional, not affecting work and not breaking any policy","Allowed for a private side business"],a:2,e:"Any personal use must be limited, must not interfere with work and must never breach policy or law."},
+{id:3,t:"Acceptable Use",q:"You need a free tool from the internet for your work laptop. What should you do?",o:["Download and install it yourself","Ask a colleague with admin rights to install it","Request it through IT so only approved software is installed","Install it, then tell IT afterwards"],a:2,e:"Only approved software, installed through IT, may be used on company devices."},
+{id:4,t:"Acceptable Use",q:"A colleague asks for your password so they can cover your work while you are on leave. What do you do?",o:["Share it by phone, not by email","Write it on a note and give it to them","Never share it; ask your manager to request access through IT","Share it and change it when you return"],a:2,e:"Passwords are personal. Access for cover is requested through IT or delegated properly."},
+{id:5,t:"Acceptable Use",q:"Can the company monitor your use of its systems, email and internet?",o:["No, it is private","Yes, users should have no expectation of privacy on company systems","Only with a court order","Only the email system"],a:1,e:"Use of company systems may be monitored to protect information and enforce policy."},
+{id:6,t:"Acceptable Use",q:"You leave your desk for a short break. What should you do with your computer?",o:["Leave it on; you will be back soon","Turn off the monitor","Lock the screen (Windows key + L)","Ask a colleague to watch it"],a:2,e:"Always lock your screen when you step away, even for a minute."},
+{id:7,t:"Acceptable Use",q:"What does a clean desk rule require at the end of the day?",o:["Throw away all papers","Lock away confidential documents and devices","Leave papers face down","Nothing, cleaners handle it"],a:1,e:"Confidential papers, USB drives and devices are locked away when you leave."},
+{id:8,t:"Acceptable Use",q:"You want to take work files home on your personal USB drive. Is this acceptable?",o:["Yes, if you delete them later","Yes, if the files are small","No, use approved company storage or an approved encrypted company device","Yes, if your manager says it is urgent"],a:2,e:"Personal removable media must not be used for company information."},
+{id:9,t:"Acceptable Use",q:"Is it acceptable to forward work emails to your personal Gmail or Hotmail account to read at home?",o:["Yes, if they are not marked confidential","No, company information must stay on company-approved systems","Yes, if you delete them after reading","Yes, during weekends only"],a:1,e:"Forwarding work email to personal accounts moves company data outside its protection."},
+{id:10,t:"Acceptable Use",q:"Can you paste an internal report into a public AI chatbot to summarise it?",o:["Yes, AI tools are safe","Yes, if you remove the logo","No, unless it is a company-approved tool; never enter internal or confidential data into public AI tools","Yes, if you use a personal account"],a:2,e:"Data entered into public AI tools can be stored and reused outside the company's control."},
+{id:11,t:"Acceptable Use",q:"You take a photo of an interesting job in a restricted airside area. Can you post it on social media?",o:["Yes, if no people are visible","No, not without authorisation; it may expose security-sensitive information","Yes, on a private account","Yes, after a week"],a:1,e:"Photos of restricted and operational areas can reveal security details and are not shared without approval."},
+{id:12,t:"Acceptable Use",q:"What must you do with company assets and information when you leave the company?",o:["Keep a copy for reference","Return all devices, cards and information, and keep no copies","Return only the laptop","Delete your files and keep the phone"],a:1,e:"All assets and information are returned and access is removed on exit."},
+{id:13,t:"Acceptable Use",q:"Your company phone is lost. What should you do first?",o:["Wait a few days in case it turns up","Buy a new one","Report it immediately to the IT Service Desk and your manager","Change your social media passwords"],a:2,e:"Fast reporting lets IT lock or wipe the device before data is misused."},
+{id:14,t:"Acceptable Use",q:"Using company systems to view or share offensive or illegal material is:",o:["Acceptable outside working hours","Acceptable if nobody complains","Prohibited and may lead to disciplinary action","Acceptable on Wi-Fi only"],a:2,e:"Prohibited use applies at all times on company systems and networks."},
+{id:15,t:"Acceptable Use",q:"Can you connect your personal laptop to the corporate network?",o:["Yes, any device can connect","Only if it is approved and enrolled by IT","Yes, using a colleague's network cable","Yes, if antivirus is installed"],a:1,e:"Only approved and managed devices may connect to the corporate network."},
+{id:16,t:"Acceptable Use",q:"You print a confidential document on a shared printer. What should you do?",o:["Collect it later in the day","Collect it immediately, or use secure / follow-me printing","Ask anyone nearby to bring it","Leave it; printers are in the office"],a:1,e:"Uncollected printouts are a common way confidential information leaks."},
+{id:17,t:"Acceptable Use",q:"How should confidential paper documents be disposed of?",o:["In the normal waste bin","In the recycling bin","Shredded or placed in the confidential waste bin","Taken home and burned"],a:2,e:"Confidential paper is shredded or placed in secure confidential waste."},
+{id:18,t:"Acceptable Use",q:"A colleague left their computer logged in. Can you use it to send a quick email?",o:["Yes, if it is urgent","No, every user is accountable for activity under their own account","Yes, if you sign the email with your name","Yes, if they are your friend"],a:1,e:"Never use another person's session or account; actions are recorded against their identity."},
+{id:19,t:"Acceptable Use",q:"Which of these is prohibited?",o:["Locking your screen","Disabling antivirus or using a VPN to get around web filtering","Reporting a suspicious email","Using a strong password"],a:1,e:"Bypassing or disabling security controls is never allowed."},
+{id:20,t:"Acceptable Use",q:"You are working on your laptop in a café. What should you do?",o:["Take confidential calls freely","Watch for people viewing your screen, use a privacy screen and lock the laptop if you step away","Leave the laptop while ordering","Use any free Wi-Fi without VPN"],a:1,e:"Public places bring shoulder surfing, eavesdropping and theft risks."},
+{id:21,t:"Acceptable Use",q:"Where should you store work files?",o:["Personal Dropbox or Google Drive","Company-approved storage such as OneDrive or SharePoint","On a personal USB drive","In your personal email"],a:1,e:"Approved company storage is backed up, access-controlled and protected."},
+{id:22,t:"Acceptable Use",q:"You sent an email with confidential information to the wrong external person. What should you do?",o:["Nothing, it was a mistake","Ask the person to delete it and say nothing more","Report it immediately as a security incident","Send a recall request and forget it"],a:2,e:"Misdirected confidential data is an incident and must be reported straight away."},
+{id:23,t:"Acceptable Use",q:"A document is classified \"Official Use\". Who may it be shared with?",o:["Anyone, including the public","Abu Dhabi Airports personnel and authorised service providers who need it for their work","Only the CEO","Friends and family"],a:1,e:"Official Use information is for internal use by ADA personnel and its authorised service providers."},
+{id:24,t:"Acceptable Use",q:"Should you use your company email address to sign up for personal websites and shopping?",o:["Yes, it is more professional","No, use it only for business purposes","Yes, if the site is popular","Only for social media"],a:1,e:"Using work email on personal sites increases spam, phishing and breach exposure."},
+{id:25,t:"Acceptable Use",q:"Who is responsible for protecting company information assets?",o:["Only the IT department","Only managers","Every employee and service provider who uses them","Only the security team"],a:2,e:"Information security is everyone's responsibility."},
+// ---- Information Security Awareness Essentials (ISA)
+{id:26,t:"Security Awareness",q:"Which is a common sign of a phishing email?",o:["It comes from a known colleague with expected content","Urgent pressure, an unexpected link or attachment, and a mismatched sender address","It has a company signature","It arrives during working hours"],a:1,e:"Urgency, unexpected links and odd sender addresses are classic phishing signs."},
+{id:27,t:"Security Awareness",q:"You receive a suspicious email. What is the right action?",o:["Click the link to check it","Forward it to colleagues to warn them","Report it using the Report Phishing button or to IT Security, then delete it","Reply asking if it is real"],a:2,e:"Report it through the official channel; do not click, reply or forward it."},
+{id:28,t:"Security Awareness",q:"You clicked a link and entered your password on a fake login page. What now?",o:["Do nothing if nothing happened","Change your password immediately and report it to IT Security","Clear your browser history","Wait to see if your account is locked"],a:1,e:"Change the password and report quickly so IT can check for misuse."},
+{id:29,t:"Security Awareness",q:"Which is the strongest password?",o:["Password123","Your date of birth","A long, unique passphrase such as \"Blue-Runway-Coffee-2026!\"","Your employee ID"],a:2,e:"Long, unique passphrases are hardest to guess or crack. Never reuse them."},
+{id:30,t:"Security Awareness",q:"You get a multi-factor authentication (MFA) approval request you did not start. What do you do?",o:["Approve it to stop the notifications","Deny it and report it to IT Security","Ignore it","Approve it once only"],a:1,e:"An unexpected MFA prompt means someone may have your password (MFA fatigue attack)."},
+{id:31,t:"Security Awareness",q:"A caller says they are from IT and asks for your password or one-time code. What should you do?",o:["Give it if they know your name","Give only the one-time code","Never share it; end the call and contact IT through the official number","Email it to them instead"],a:2,e:"IT will never ask for your password or one-time codes. This is vishing."},
+{id:32,t:"Security Awareness",q:"Someone without a visible pass follows you through a secure door. What should you do?",o:["Hold the door, it is polite","Ignore it","Politely ask them to use their own pass, or direct them to reception / security","Report it next week"],a:2,e:"Tailgating lets unauthorised people into secure areas."},
+{id:33,t:"Security Awareness",q:"What is required for visitors to office or operational areas?",o:["Nothing if they are known","Sign in, wear a visitor pass and be escorted","Only a phone call","They can walk in freely"],a:1,e:"Visitors are registered, identified and escorted at all times."},
+{id:34,t:"Security Awareness",q:"You find a USB drive in the car park. What do you do?",o:["Plug it in to find the owner","Keep it","Hand it to IT or Security without plugging it in","Plug it into a colleague's computer"],a:2,e:"Dropped USB drives are a known way to deliver malware."},
+{id:35,t:"Security Awareness",q:"Your laptop asks to install approved security updates. What should you do?",o:["Postpone them indefinitely","Install them promptly as prompted","Disable updates","Only update once a year"],a:1,e:"Updates fix security weaknesses that attackers exploit."},
+{id:36,t:"Security Awareness",q:"You must work on public Wi-Fi at an airport lounge. What should you do?",o:["Use it normally","Connect through the company VPN, or avoid sensitive work","Turn off the firewall","Share files over the open network"],a:1,e:"Public Wi-Fi can be monitored; the company VPN protects your traffic."},
+{id:37,t:"Security Awareness",q:"What is ransomware?",o:["A program that speeds up your computer","Malware that encrypts files and demands payment to unlock them","A type of firewall","An antivirus update"],a:1,e:"Ransomware locks data and can stop operations; report any signs immediately."},
+{id:38,t:"Security Awareness",q:"What is social engineering?",o:["Building social networks","Manipulating people into giving away information or access","A type of software update","Network engineering"],a:1,e:"Attackers target people because people can be persuaded or rushed."},
+{id:39,t:"Security Awareness",q:"A text message says your parcel is held and asks you to pay a small fee by link. This is most likely:",o:["A genuine delivery notice","Smishing (SMS phishing)","A system update","A bank alert"],a:1,e:"Phishing by SMS uses small fees and urgency to steal card details."},
+{id:40,t:"Security Awareness",q:"When should you report a suspected security incident?",o:["At the end of the month","Only if you are sure","Immediately, even if you are not sure","Only if data was lost"],a:2,e:"Early reporting limits damage. It is better to report and be wrong."},
+{id:41,t:"Security Awareness",q:"An email from the \"CEO\" urgently asks you to buy gift cards or make a bank transfer. What do you do?",o:["Act quickly; it is the CEO","Verify the request through a known, separate channel before doing anything","Reply to the email to confirm","Forward it to finance"],a:1,e:"This is business email compromise; always verify payment requests independently."},
+{id:42,t:"Security Awareness",q:"What does the principle of least privilege mean?",o:["Everyone gets admin rights","Users get only the access they need for their job","Managers get all access","Access is never removed"],a:1,e:"Limiting access reduces the damage a mistake or attacker can cause."},
+{id:43,t:"Security Awareness",q:"You need to send a confidential file to an approved external party. How?",o:["Personal email","Free file-sharing websites","An approved, secure (encrypted) company transfer method to authorised recipients only","WhatsApp"],a:2,e:"Use approved secure methods and send only to authorised recipients."},
+{id:44,t:"Security Awareness",q:"An email contains a QR code asking you to scan it to \"re-validate your account\". This is:",o:["A normal IT process","Likely QR phishing (quishing); report it","A safe shortcut","A software licence check"],a:1,e:"QR codes hide the real link and are increasingly used in phishing."},
+{id:45,t:"Security Awareness",q:"Why should you limit what you share about your job and travel on social media?",o:["It does not matter","Attackers use it to make targeted phishing and social engineering more convincing","It slows the internet","It is required by law only"],a:1,e:"Personal details help attackers craft believable attacks."},
+{id:46,t:"Security Awareness",q:"What is shoulder surfing?",o:["A water sport","Someone watching your screen or keyboard to steal information","A type of malware","Remote desktop support"],a:1,e:"Shield PINs and passwords and be aware of who can see your screen."},
+{id:47,t:"Security Awareness",q:"Your computer shows unusual pop-ups, runs very slowly and has programs you did not install. What should you do?",o:["Ignore it","Try to fix it with tools from the internet","Stop using it and report it to the IT Service Desk","Restart it repeatedly"],a:2,e:"These can be signs of malware; IT must investigate."},
+{id:48,t:"Security Awareness",q:"Your screen locks automatically after a few minutes. Do you still need to lock it manually when you leave?",o:["No, the timer is enough","Yes, always lock it as soon as you step away","Only at the end of the day","Only in public places"],a:1,e:"Anyone can use an unlocked computer in the minutes before the timer starts."},
+{id:49,t:"Security Awareness",q:"You get an urgent call that sounds like your manager, asking you to share a password or send money. What do you do?",o:["Do it, you recognise the voice","Verify by calling your manager back on their known number","Send half now","Ask a colleague to do it"],a:1,e:"Voices can be faked (deepfakes); verify through a separate, known channel."},
+{id:50,t:"Security Awareness",q:"Information security protects which three things (the CIA triad)?",o:["Cost, Insurance, Access","Confidentiality, Integrity, Availability","Control, Inspection, Audit","Computers, Internet, Applications"],a:1,e:"Keep information secret where needed, accurate, and available when required."}
+];
+
+const N = 20;
+const API = "https://rawmrufnuditbjjjyjsx.supabase.co/rest/v1";
+const KEY = "sb_publishable_Yu3Wc5ZO4oFykDrn7PSPvw_ATtDl_9O";
+const H = { "apikey": KEY, "Content-Type": "application/json" };
+async function rpc(fn, body) {
+  const r = await fetch(`${API}/rpc/${fn}`, { method: "POST", headers: H, body: JSON.stringify(body) });
+  if (!r.ok) { const e = new Error("http " + r.status); e.status = r.status; e.body = await r.text().catch(() => ""); throw e; }
+  return r.json();
+}
+const $ = id => document.getElementById(id);
+let quiz = [], answers = [], idx = 0, emp = { id: "", name: "" }, submitted = false, lastSeen = [];
+function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+function build() {
+  const seen = new Set(lastSeen);
+  const pick = shuffle(BANK.filter(q => !seen.has(q.id))).concat(shuffle(BANK.filter(q => seen.has(q.id)))).slice(0, N);
+  quiz = shuffle(pick).map(q => ({ q, order: shuffle([0, 1, 2, 3]) }));
+  answers = new Array(N).fill(null); idx = 0; submitted = false;
+}
+function show(v) { for (const s of ["vStart", "vQuiz", "vResult", "vLogin", "vAdmin"]) $(s).hidden = s !== v; $("app").classList.toggle("wide", v === "vAdmin"); window.scrollTo(0, 0); }
+function renderQ() {
+  const { q, order } = quiz[idx];
+  $("qCount").textContent = `Question ${idx + 1} of ${N}`; $("qEmp").textContent = `ID ${emp.id}`;
+  $("bar").style.width = `${(idx / N) * 100}%`; $("qTopic").textContent = q.t; $("qText").textContent = q.q;
+  const box = $("opts"); box.textContent = "";
+  order.forEach((oi, k) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "opt"; b.setAttribute("role", "radio");
+    b.setAttribute("aria-checked", answers[idx] === oi ? "true" : "false");
+    const key = document.createElement("span"); key.className = "key"; key.textContent = "ABCD"[k];
+    const txt = document.createElement("span"); txt.textContent = q.o[oi];
+    b.append(key, txt); b.addEventListener("click", () => { answers[idx] = oi; renderQ(); }); box.append(b);
+  });
+  $("prevBtn").disabled = idx === 0; $("nextBtn").disabled = answers[idx] === null;
+  $("nextBtn").textContent = idx === N - 1 ? "Submit" : "Next";
+}
+async function save(row, tries = 3) {
+  for (let i = 0; i < tries; i++) {
+    try {
+      const r = await fetch(`${API}/quiz_results`, { method: "POST", headers: { ...H, "Prefer": "return=minimal" }, body: JSON.stringify(row) });
+      if (r.ok) return true;
+      if (r.status < 500) return false;
+    } catch (e) { /* network: retry */ }
+    await new Promise(res => setTimeout(res, 1500 * (i + 1)));
+  }
+  return false;
+}
+let pending = null;
+async function finish() {
+  if (submitted) return; submitted = true;
+  const score = quiz.reduce((s, it, i) => s + (answers[i] === it.q.a ? 1 : 0), 0);
+  $("rEmp").textContent = `Employee ID ${emp.id}${emp.name ? " · " + emp.name : ""}`;
+  $("rScore").textContent = score;
+  $("rMsg").textContent = score === N ? "Excellent. Full marks." : score >= 16 ? "Well done. Review the answers you missed below." : "Please review the answers below and take the quiz again.";
+  const rv = $("review"); rv.textContent = "";
+  quiz.forEach((it, i) => {
+    const ok = answers[i] === it.q.a; const d = document.createElement("div"); d.className = "rv";
+    const tag = document.createElement("span"); tag.className = "tag " + (ok ? "ok" : "bad"); tag.textContent = `${i + 1}. ${ok ? "Correct" : "Incorrect"}`;
+    const qq = document.createElement("p"); qq.style.fontWeight = "600"; qq.textContent = it.q.q;
+    const yours = document.createElement("p"); yours.className = "small"; yours.textContent = `Your answer: ${it.q.o[answers[i]]}`;
+    d.append(tag, qq, yours);
+    if (!ok) { const c = document.createElement("p"); c.textContent = `Correct answer: ${it.q.o[it.q.a]}`; d.append(c); }
+    const ex = document.createElement("p"); ex.className = "muted"; ex.textContent = it.q.e; d.append(ex); rv.append(d);
+  });
+  show("vResult");
+  pending = { employee_id: emp.id, name: emp.name || null, score, total: N, questions: quiz.map(it => it.q.id), correct: quiz.map((it, i) => answers[i] === it.q.a ? 1 : 0) };
+  await trySave();
+}
+async function trySave() {
+  const saved = $("rSaved"); saved.className = "note"; saved.textContent = "Saving your score…"; $("againBtn").disabled = true;
+  const ok = await save(pending);
+  $("againBtn").disabled = false;
+  if (ok) { saved.className = "note ok"; saved.textContent = `Score saved against Employee ID ${emp.id}.`; pending = null; }
+  else {
+    saved.className = "note bad"; saved.textContent = "Your score could not be saved. Check your connection and tap here to try again.";
+    saved.style.cursor = "pointer"; saved.onclick = () => { if (pending) trySave(); };
+  }
+}
+$("startForm").addEventListener("submit", async ev => {
+  ev.preventDefault();
+  const id = $("empId").value.trim().toUpperCase();
+  if (!/^[A-Z0-9\-\/]{2,20}$/.test(id)) { $("startErr").textContent = "Enter your employee ID number (letters and numbers only)."; return; }
+  $("startErr").textContent = ""; $("startBtn").disabled = true;
+  emp = { id, name: $("empName").value.trim().slice(0, 60) };
+  try { lastSeen = (await rpc("quiz_last_questions", { emp: id })) || []; } catch (e) { lastSeen = []; }
+  $("startBtn").disabled = false;
+  build(); show("vQuiz"); renderQ();
+});
+$("nextBtn").addEventListener("click", () => { if (answers[idx] === null) return; if (idx < N - 1) { idx++; renderQ(); } else finish(); });
+$("prevBtn").addEventListener("click", () => { if (idx > 0) { idx--; renderQ(); } });
+$("againBtn").addEventListener("click", () => { lastSeen = quiz.map(it => it.q.id); build(); show("vQuiz"); renderQ(); });
+
+// ---- results (open the page with #results)
+let allRows = [], adminPw = "";
+function renderAdmin() {
+  const f = $("search").value.trim().toUpperCase();
+  const rows = allRows.filter(r => !f || r.employee_id.includes(f) || (r.name || "").toUpperCase().includes(f));
+  const tb = $("rows"); tb.textContent = "";
+  rows.forEach(r => {
+    const tr = document.createElement("tr"); const pct = Math.round(r.score / r.total * 100);
+    [new Date(r.created_at).toLocaleString(), r.employee_id, r.name || "—", `${r.score} / ${r.total}`, null, String(r.n)].forEach((c, i) => {
+      const td = document.createElement("td");
+      if (i === 4) { const p = document.createElement("span"); p.className = "pill " + (pct >= 80 ? "hi" : "lo"); p.textContent = pct + "%"; td.append(p); } else td.textContent = c;
+      tr.append(td);
+    });
+    tb.append(tr);
+  });
+  const people = new Set(allRows.map(r => r.employee_id));
+  const avg = allRows.length ? (allRows.reduce((s, r) => s + r.score, 0) / allRows.length).toFixed(1) + " / 20" : "–";
+  const st = $("stats"); st.textContent = "";
+  [["Attempts", allRows.length], ["Employees", people.size], ["Average score", avg], ["Full marks", allRows.filter(r => r.score === r.total).length]].forEach(([k, v]) => {
+    const d = document.createElement("div"); d.className = "stat"; const b = document.createElement("b"); b.textContent = v;
+    const s = document.createElement("span"); s.className = "small"; s.textContent = k; d.append(b, s); st.append(d);
+  });
+  $("adminState").textContent = allRows.length ? `${rows.length} of ${allRows.length} attempts shown, newest first.` : "No attempts yet.";
+}
+async function loadResults() {
+  $("adminState").textContent = "Loading results…";
+  const data = await rpc("quiz_results_admin", { pw: adminPw });
+  const counts = {};
+  data.slice().reverse().forEach(r => { counts[r.employee_id] = (counts[r.employee_id] || 0) + 1; r.n = counts[r.employee_id]; });
+  allRows = data; renderAdmin();
+}
+$("loginForm").addEventListener("submit", async ev => {
+  ev.preventDefault(); adminPw = $("pw").value; $("loginErr").textContent = "Checking…";
+  try { await loadResults(); $("loginErr").textContent = ""; show("vAdmin"); }
+  catch (e) { $("loginErr").textContent = e.status ? "Wrong password." : "Could not connect. Check your connection and try again."; }
+});
+$("refreshBtn").addEventListener("click", () => loadResults().catch(() => { $("adminState").textContent = "Could not refresh. Check your connection."; }));
+$("search").addEventListener("input", renderAdmin);
+$("csvBtn").addEventListener("click", () => {
+  const esc = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+  const lines = [["Date", "Employee ID", "Name", "Score", "Total", "Percent", "Attempt no."].join(",")]
+    .concat(allRows.map(r => [esc(new Date(r.created_at).toLocaleString()), esc(r.employee_id), esc(r.name), r.score, r.total, Math.round(r.score / r.total * 100), r.n].join(",")));
+  const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob(["﻿" + lines.join("\n")], { type: "text/csv" }));
+  a.download = "infosec-quiz-results.csv"; document.body.append(a); a.click(); a.remove();
+});
+if (location.hash === "#results") show("vLogin");
+</script>
+</body></html>
